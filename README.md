@@ -17,5 +17,4 @@ Examples related to Jenkins, Jenkins X and CloudBees Core
 
 ## Grafana Dashboard
 
-* [Monitore Jenkins On Kubernetes Guide](https://joostvdg.github.io/blogs/monitor-jenkins-on-k8s/introduction/)
-
+* [Monitor Jenkins On Kubernetes Guide](https://joostvdg.github.io/blogs/monitor-jenkins-on-k8s/introduction/)
