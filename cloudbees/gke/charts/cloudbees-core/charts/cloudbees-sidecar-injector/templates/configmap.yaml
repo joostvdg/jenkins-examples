@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudbees-sidecar-injector
+  labels:
+{{ include "sidecar-injector.labels" . | indent 4 }}
+data:
+  sidecarconfig.yaml: |-
+    annotationPrefix: {{ .Values.annotationPrefix }}
+    requiresExplicitInjection: false
+    container:
+      volumeMounts:
+        {{- range .Values.injectionCaCertificates }}
+        - name: bundles
+          mountPath: {{ . }}
+          subPath: ca-certificates.crt
+        {{- end }}
+        {{- range .Values.injectionJavaKeystore }}
+        - name: bundles
+          mountPath: {{ . }}
+          subPath: cacerts
+        {{- end }}
+    volumes:
+      - name: bundles
+        configMap:
+          name: {{ .Values.caBundleName }}
+{{- if .Values.caBundleCrt }}
+  ca.crt: |-
+{{ .Values.caBundleCrt | indent 4}}
+{{- end }}

@@ -1,0 +1,20 @@
+{{- if .Values.Master.Enabled -}}
+{{- if .Values.rbac.install -}}
+apiVersion: {{ template "rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: cjoc-master-role-binding
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+roleRef:
+  apiGroup: {{ template "rbac.apiGroup" . }}
+  kind: Role
+  name: cjoc-agents
+{{- if  (eq .Values.OperationsCenter.Platform "openshift") }}
+  namespace: {{.Release.Namespace}}
+{{- end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.rbac.masterServiceAccountName }}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,21 @@
+{{- if .Values.Hibernation.Enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: managed-master-hibernation-monitor
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+    app: managed-master-hibernation-monitor
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8090
+    # TODO is nodePort needed?
+  selector:
+    # TODO does this need to be made specific to release somehow?
+    app: managed-master-hibernation-monitor
+  # TODO consider OperationsCenter.ServiceType
+  type: ClusterIP
+{{- end -}}

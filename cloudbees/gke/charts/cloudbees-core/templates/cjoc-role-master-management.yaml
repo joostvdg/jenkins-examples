@@ -1,0 +1,48 @@
+{{ template "validate.operationscenter" . }}
+{{- if or (.Values.OperationsCenter.Enabled) (.Values.Master.OperationsCenterNamespace) -}}
+{{- if .Values.rbac.install -}}
+kind: Role
+apiVersion: {{ template "rbac.apiVersion" . }}
+metadata:
+  name: cjoc-master-management
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get","list","watch"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets","deployments"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+{{- if eq .Values.OperationsCenter.Platform "openshift" }}
+- apiGroups: ["route.openshift.io",""]
+  resources: ["routes"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes/custom-host"]
+  verbs: ["create"]
+{{- else}}
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+{{- end}}
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["list", "get", "create", "delete"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get","list","watch"]
+{{- end -}}
+{{- end -}}

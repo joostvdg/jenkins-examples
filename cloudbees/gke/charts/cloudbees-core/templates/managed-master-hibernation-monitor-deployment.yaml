@@ -1,0 +1,72 @@
+{{- if .Values.Hibernation.Enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: managed-master-hibernation-monitor
+  labels:
+    app: managed-master-hibernation-monitor
+    # TODO app.kubernetes.io/component?
+{{ include "cloudbees-core.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: managed-master-hibernation-monitor
+  template:
+    metadata:
+      labels:
+        app: managed-master-hibernation-monitor
+{{ include "cloudbees-core.labels" . | indent 8 }}
+    spec:
+      affinity:
+        nodeAffinity:
+          # Schedule on Linux nodes only.
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ include "os.label" . }}
+                operator: In
+                values:
+                  - linux
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              # Prefer nodes where there are no masters
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: com.cloudbees.cje.type
+                      operator: In
+                      values:
+                        - master
+      containers:
+      - name: managed-master-hibernation-monitor
+        {{- with .Values.Hibernation.Image}}
+        image: {{ .dockerImage }}
+        imagePullPolicy: {{ .dockerPullPolicy }}
+        {{- end}}
+        ports:
+        - containerPort: 8090
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8090
+          periodSeconds: 30
+          timeoutSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8090
+          periodSeconds: 30
+          timeoutSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+          limits:
+            memory: 250Mi
+      serviceAccountName: {{ .Values.rbac.hibernationMonitorServiceAccountName }}
+{{- end -}}

@@ -48,7 +48,7 @@ pipeline {
                     }
                 }
                 stages {
-                    stage("Build Matrix") {
+                    stage("${JDK_TYPE}-${JDK_VERSION}") {
                         stages {
                             stage('Test Image') {
                                 steps {

@@ -1,0 +1,29 @@
+{{- if .Values.Hibernation.Enabled -}}
+{{- if and (eq .Values.OperationsCenter.ServiceType "ClusterIP") (not (eq .Values.OperationsCenter.Platform "openshift")) }}
+apiVersion: {{ .Values.OperationsCenter.Ingress.ApiVersion }}
+kind: Ingress
+metadata:
+  name: managed-master-hibernation-monitor
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "{{- template "ingress.ssl_redirect" . }}"
+    # TODO any AWS-specific annotations required? should OperationsCenter.Ingress.Annotations be honored here?
+spec:
+  rules:
+  - host: {{ required "A valid OperationsCenter.HostName entry required!" .Values.OperationsCenter.HostName | quote }}
+    http:
+      paths:
+      - path: /hibernation
+        backend:
+          serviceName: managed-master-hibernation-monitor
+          servicePort: 80
+{{- if .Values.OperationsCenter.Ingress.tls.Enable }}
+  tls:
+    - hosts:
+        - {{ .Values.OperationsCenter.Ingress.tls.Host }}
+      secretName: {{ .Values.OperationsCenter.Ingress.tls.SecretName }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

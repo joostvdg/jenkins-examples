@@ -1,0 +1,11 @@
+apiVersion: v1
+appVersion: 2.190.3.2
+description: The Continuous Delivery Solution for Enterprises
+engine: gotpl
+home: https://www.cloudbees.com/products/cloudbees-core
+icon: https://www.cloudbees.com/sites/default/files/cloudbees-infinity-favicon.png
+keywords:
+- cloudbees
+- jenkins
+name: cloudbees-core
+version: 3.7.0+ffcae9c08fc6

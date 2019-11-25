@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudbees-sidecar-injector
+  labels:
+{{ include "sidecar-injector.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+{{ include "sidecar-injector.labels" . | indent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.rollingMaxSurge }}
+      maxUnavailable: {{ .Values.rollingMaxUnavailable }}
+  template:
+    metadata:
+      labels:
+{{ include "sidecar-injector.labels" . | indent 8 }}
+      annotations:
+        {{ .Values.annotationPrefix }}/inject: "false"
+        {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ .Values.rbac.serviceAccountName }}
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
+      containers:
+        - name: sidecar-injector-webhook
+{{- if contains "/" .Values.image }}
+          image: "{{ .Values.image }}"
+{{- else }}
+          image: "{{ .Values.hub }}/{{ .Values.image }}:{{ .Values.tag }}"
+{{- end }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          args:
+            - --webhookConfigName={{ .Release.Name }}
+            - --configFile=/etc/cloudbees/config/sidecarconfig.yaml
+{{- if .Values.caBundleCrt }}
+            - --caCertFile=/etc/cloudbees/config/ca.crt
+{{- end }}
+            - --tlsCertFile=/etc/cloudbees/certs/tls.crt
+            - --tlsKeyFile=/etc/cloudbees/certs/tls.key
+            - --port=8443
+          volumeMounts:
+          - name: certs
+            mountPath: /etc/cloudbees/certs
+            readOnly: true
+          - name: config
+            mountPath: /etc/cloudbees/config
+            readOnly: true
+          resources:
+{{- if .Values.resources }}
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
+      volumes:
+      - name: certs
+        secret:
+          secretName: cloudbees-sidecar-injector
+      - name: config
+        configMap:
+          name: cloudbees-sidecar-injector
+      affinity:
+      {{- include "nodeaffinity" . | indent 6 }}
+      {{- include "podAntiAffinity" . | indent 6 }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 6 }}
+      {{- end }}

@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ include "sidecar-injector.name" . | trunc 56 }}-init"
+  labels:
+{{ include "sidecar-injector-init.labels" . | indent 4 }}
+{{- if .Values.rbac.autoApproveCSR }} # Otherwise we'll wait for CSR forever
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+{{- end}}
+spec:
+  # TTL Controller is alpha https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#ttl-mechanism-for-finished-jobs
+  ttlSecondsAfterFinished: 30
+  template:
+    spec:
+      nodeSelector:
+        # Schedule on linux nodes only.
+        {{ include "os.label" . }}: linux
+      serviceAccountName: {{ .Values.rbac.initServiceAccountName }}
+      restartPolicy: OnFailure
+      containers:
+      # The init-certs container sends a certificate signing request to the
+      # kubernetes cluster.
+      # You can see pending requests using: kubectl get csr
+      # CSRs can be approved using:         kubectl certificate approve <csr name>
+      - name: init-certs
+  {{- if contains "/" .Values.requestCert.image }}
+        image: "{{ .Values.requestCert.image }}"
+  {{- else }}
+        image: "{{ .Values.hub }}/{{ .Values.requestCert.image }}:{{ .Values.requestCert.tag }}"
+  {{- end }}
+        imagePullPolicy: "{{ .Values.ImagePullPolicy }}"
+        args:
+          - "--serviceName={{ .Values.serviceName }}"
+          - "--autoApproveCSR={{.Values.rbac.autoApproveCSR}}"

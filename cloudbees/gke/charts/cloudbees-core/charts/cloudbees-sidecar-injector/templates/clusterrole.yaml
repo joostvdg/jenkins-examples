@@ -1,0 +1,13 @@
+{{- if .Values.rbac.install }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{.Release.Name}}-{{ .Release.Namespace }}
+  labels:
+{{ include "sidecar-injector.labels" . | indent 4 }}
+rules:
+# Needed to update webhook configuration with TLS cert
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["mutatingwebhookconfigurations"]
+    verbs: ["get", "list", "watch", "patch"]
+{{- end }}

@@ -1,0 +1,104 @@
+#
+# sidecar-injector webhook configuration
+#
+serviceName: cloudbees-sidecar-injector
+replicaCount: 1
+rollingMaxSurge: 100%
+rollingMaxUnavailable: 25%
+hub: cloudbees
+image: sidecar-injector
+tag: 2.0.0
+requestCert:
+  image: cert-requester
+  tag: 2.0.0
+# Image pull options
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+# Do not enable on all namespaces by default
+enableNamespacesByDefault: false
+# Label to add to namespace to be covered by the sidecar-injector
+namespaceLabel: sidecar-injector
+annotationPrefix: com.cloudbees.sidecar-injector
+## Node labels for controller pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## Node tolerations for server scheduling to nodes with taints
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+##
+tolerations: []
+#  - key: "key"
+#    operator: "Equal|Exists"
+#    value: "value"
+#    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+## Annotations to be added to controller pods
+##
+podAnnotations: {}
+# CA certificate provided to kube-controller-manager as --cluster-signing-cert-file
+# Defaults to the API server ca.crt mounted in all pods.
+caBundleCrt: ""
+# Name of the configmap holding 'ca-certificates'  and 'cacerts'
+caBundleName: ca-bundles
+# Files to inject as ca-certificates.crt. Entries can be removed if linux distributions are known in advance
+injectionCaCertificates:
+  - /etc/ssl/certs/ca-certificates.crt # Alpine/Debian/Ubuntu/Gentoo etc.
+  - /etc/pki/tls/certs/ca-bundle.crt # Fedora/RHEL 6
+  - /etc/ssl/ca-bundle.pem # OpenSUSE
+  - /etc/pki/tls/cacert.pem # OpenELEC
+  - /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem # CentOS/RHEL 7
+# Files to inject as Java keystore. Some entries can be removed if linux distributions are known in advance
+injectionJavaKeystore:
+  - /etc/ssl/certs/java/cacerts # Alpine/Debian/Ubuntu/Gentoo etc.
+  - /var/lib/ca-certificates/java-cacerts # OpenSUSE
+  - /etc/pki/java/cacerts # CentOS/RHEL 6-7
+## Priority class name
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClassName: ""
+# enable pod disruption budget for the control plane, which is used to
+# ensure control plane components are gradually upgraded or recovered.
+# Ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+podDisruptionBudget:
+  enabled: true
+  # The values aren't mutable due to a current PodDisruptionBudget limitation
+  # minAvailable: 1
+# Specify pod scheduling arch(amd64, ppc64le, s390x) and weight as follows:
+#   0 - Never scheduled
+#   1 - Least preferred
+#   2 - No preference
+#   3 - Most preferred
+arch:
+  amd64: 2
+  s390x: 2
+  ppc64le: 2
+
+# Specify the pod anti-affinity that allows you to constrain which nodes
+# your pod is eligible to be scheduled based on labels on pods that are
+# already running on the node rather than based on labels on nodes.
+# There are currently two types of anti-affinity:
+#    "requiredDuringSchedulingIgnoredDuringExecution"
+#    "preferredDuringSchedulingIgnoredDuringExecution"
+# which denote "hard" vs. "soft" requirements, you can define your values
+# in "podAntiAffinityLabelSelector" and "podAntiAffinityTermLabelSelector"
+# correspondingly.
+# For example:
+# podAntiAffinityLabelSelector:
+# - key: security
+#   operator: In
+#   values: S1,S2
+#   topologyKey: "kubernetes.io/hostname"
+# This pod anti-affinity rule says that the pod requires not to be scheduled
+# onto a node if that node is already running a pod with label having key
+# "security" and value "S1".
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+podAntiAffinityLabelSelector: []
+podAntiAffinityTermLabelSelector: []
+
+rbac:
+  # Whether to set up rbac objects
+  install: true
+  # Name of the service account to run the sidecar-injector
+  serviceAccountName: cloudbees-sidecar-injector
+  # Name of service account to run the init tasks
+  initServiceAccountName: cloudbees-sidecar-injector-init
+  # Whether to automatically approve the CSR (requires more privileges)
+  autoApproveCSR: true

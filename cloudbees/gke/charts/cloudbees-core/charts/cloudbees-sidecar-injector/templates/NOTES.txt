@@ -1,0 +1,27 @@
+{{- if not (.Values.rbac.autoApproveCSR) }}
+This chart deployment has created a CertificateSigningRequest in order to secure its communication with the Kubernetes API server.
+It must be approved manually using the following command
+
+$ kubectl certificate approve cloudbees-sidecar-injector
+
+Once approved, the sidecar-injector will start. You can check it has started using the following command
+
+$ kubectl get pods -l cloudbees=sidecar-injector
+
+{{- end }}
+You have to provide a configmap named {{ .Values.caBundleName }} following the format described in the charts README.md containing two files
+* ca-certificates.crt : a certificate bundle in pem format
+* cacerts : the certificate bundle using the java keystore format
+
+These can be generated using the following commands:
+
+kubectl cp cjoc-0:/etc/ssl/certs/ca-certificates.crt ./ca-certificates.crt
+kubectl cp cjoc-0:/etc/ssl/certs/java/cacerts ./cacerts
+cat mycertificate.pem >> ca-certificates.crt
+keytool -import -noprompt -keystore cacerts -file mycertificate.pem -storepass changeit -alias service-mycertificate;
+kubectl create configmap --from-file=ca-certificates.crt,cacerts ca-bundles
+
+Then label a namespace where CloudBees Core objects are/will be deployed to by using the following commands (take cloudbees-core namespace as an example)
+
+$ kubectl label namespace cloudbees-core {{ .Values.namespaceLabel }}=enabled
+$ kubectl get namespace -L {{ .Values.namespaceLabel }}

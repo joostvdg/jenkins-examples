@@ -1,0 +1,72 @@
+1. Once Operations Center is up and running, get your initial admin user password by running:
+  {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+    oc rollout status sts cjoc
+    oc exec cjoc-0 -- sh -c "until cat /var/jenkins_home/secrets/initialAdminPassword 2>&-; do sleep 5; done"
+  {{- else }}
+    kubectl rollout status sts cjoc
+    kubectl exec cjoc-0 -- sh -c "until cat /var/jenkins_home/secrets/initialAdminPassword 2>&-; do sleep 5; done"
+  {{- end }}
+
+{{- if .Values.OperationsCenter.HostName }}
+2. Visit {{ template "oc.url" . }}
+{{- else }}
+2. Get the OperationsCenter URL to visit by running these commands in the same shell:
+{{- if contains "NodePort" .Values.OperationsCenter.ServiceType }}
+    {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services cjoc})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT{{ .Values.OperationsCenter.ContextPath }}/login
+    {{- else }}
+      export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services cjoc})
+      export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+      echo http://$NODE_IP:$NODE_PORT/cjoc/login
+    {{- end }}
+{{- else if contains "LoadBalancer" .Values.OperationsCenter.ServiceType }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+   {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+You can watch the status of by running 'oc get svc --namespace {{ .Release.Namespace }} -w cjoc'
+   {{- else }}
+You can watch the status of by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w cjoc'
+   {{- end }}
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} cjoc--template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  echo http://$SERVICE_IP:{{ .Values.OperationsCenter.ServicePort }}/login
+{{- else if contains "ClusterIP"  .Values.OperationsCenter.ServiceType }}
+    {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+        export POD_NAME=$(oc get pods --namespace {{ .Release.Namespace }} -l "component=cjoc-master" -o jsonpath="{.items[0].metadata.name}")
+    {{- else }}
+        export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "component=cjoc-master" -o jsonpath="{.items[0].metadata.name}")
+    {{- end }}
+  echo http://127.0.0.1:{{ .Values.OperationsCenter.ServicePort }}
+    {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+        oc port-forward $POD_NAME {{ .Values.OperationsCenter.ServicePort }}:{{ .Values.OperationsCenter.ServicePort }}
+    {{- else }}
+        kubectl port-forward $POD_NAME {{ .Values.OperationsCenter.ServicePort }}:{{ .Values.OperationsCenter.ServicePort }}
+    {{- end }}
+{{- end }}
+{{- end }}
+
+
+3. Login with the password from step 1.
+
+For more information on running CloudBees Core on Kubernetes, visit:
+https://go.cloudbees.com/docs/cloudbees-core/cloud-admin-guide/
+
+{{- if .Values.sidecarinjector.Enabled }}
+4. Configuring self-signed certificates or custom root CA
+
+helm inspect readme cloudbees/cloudbees-sidecar-injector
+{{- end }}
+
+{{- if .Values.Persistence.Enabled }}
+{{- else }}
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Jenkins pod is terminated.                            #####
+#################################################################################
+{{- end }}
+
+{{- if .Values.rbac.install }}
+Configure the Kubernetes plugin in Jenkins to use the following Service Account name cjoc using the following steps:
+  Create a Jenkins credential of type Kubernetes service account with service account name cjoc.
+  Under configure Jenkins -- Update the credentials config in the cloud section to use the service account credential you created in the step above.
+{{- end }}

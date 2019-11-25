@@ -1,0 +1,20 @@
+{{- if .Values.Hibernation.Enabled -}}
+{{- if .Values.rbac.install -}}
+apiVersion: {{ template "rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: managed-master-hibernation-monitor
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+roleRef:
+  apiGroup: {{ template "rbac.apiGroup" . }}
+  kind: Role
+  name: managed-master-hibernation-monitor
+{{- if  (eq .Values.OperationsCenter.Platform "openshift") }}
+  namespace: {{.Release.namespace}}
+{{- end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.rbac.hibernationMonitorServiceAccountName }}
+{{- end -}}
+{{- end -}}

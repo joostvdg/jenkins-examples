@@ -1,0 +1,25 @@
+{{- if .Values.OperationsCenter.Enabled -}}
+{{- if eq .Values.OperationsCenter.Platform "openshift" -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cjoc
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+spec:
+  host:  {{ required "A valid .Values.OperationsCenter.HostName entry required!" .Values.OperationsCenter.HostName | quote }}
+  path: {{ .Values.OperationsCenter.ContextPath | quote }}
+  to:
+    kind: Service
+    name: cjoc
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
+        {{- if eq .Values.OperationsCenter.Route.tls.Enable true }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+        {{end }}
+{{- end -}}
+{{- end -}}

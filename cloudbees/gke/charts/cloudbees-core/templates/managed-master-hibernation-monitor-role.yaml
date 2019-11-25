@@ -1,0 +1,20 @@
+{{- if .Values.Hibernation.Enabled -}}
+{{- if .Values.rbac.install -}}
+kind: Role
+apiVersion: {{ template "rbac.apiVersion" . }}
+metadata:
+  name: managed-master-hibernation-monitor
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - get
+  - patch
+  - update
+  - list
+{{- end -}}
+{{- end -}}

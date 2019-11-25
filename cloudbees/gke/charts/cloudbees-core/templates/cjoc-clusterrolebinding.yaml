@@ -1,0 +1,22 @@
+{{- if .Values.OperationsCenter.Enabled -}}
+{{- if .Values.rbac.install }}
+{{- if .Values.rbac.installCluster }}
+{{- if not (eq .Values.OperationsCenter.Platform "openshift") -}}
+kind: ClusterRoleBinding
+apiVersion: {{ template "rbac.apiVersion" . }}
+metadata:
+  name: cjoc-role-binding-{{ .Release.Namespace }}
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+roleRef:
+  apiGroup: {{ template "rbac.apiGroup" . }}
+  kind: ClusterRole
+  name: cjoc-master-management-{{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.rbac.serviceAccountName }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

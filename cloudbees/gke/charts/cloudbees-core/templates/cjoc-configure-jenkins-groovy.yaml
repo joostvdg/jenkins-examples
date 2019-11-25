@@ -1,0 +1,12 @@
+{{- if .Values.OperationsCenter.Enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cjoc-configure-jenkins-groovy
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+data:
+  location.groovy: |
+    hudson.ExtensionList.lookupSingleton(com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor.class).disable(true)
+    jenkins.model.JenkinsLocationConfiguration.get().setUrl("{{- template "oc.url" . -}}")
+{{- end -}}

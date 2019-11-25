@@ -1,0 +1,9 @@
+dependencies:
+- name: nginx-ingress
+  version: 1.4.0
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  condition: nginx-ingress.Enabled
+- name: cloudbees-sidecar-injector
+  version: 2.0.0
+  repository: https://charts.cloudbees.com/public/cloudbees
+  condition: sidecarinjector.Enabled

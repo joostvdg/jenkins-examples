@@ -1,0 +1,211 @@
+{{- if .Values.OperationsCenter.Enabled -}}
+apiVersion: "apps/v1"
+kind: "StatefulSet"
+metadata:
+  name: cjoc
+  labels:
+    com.cloudbees.cje.type: cjoc
+    com.cloudbees.cje.tenant: cjoc
+{{ include "cloudbees-core.labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.OperationsCenter.Name | quote }}
+spec:
+  selector:
+    matchLabels:
+      com.cloudbees.cje.type: cjoc
+      com.cloudbees.cje.tenant: cjoc
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  serviceName: cjoc
+  template:
+    metadata:
+{{- if .Values.OperationsCenter.Annotations}}
+      annotations:
+{{toYaml .Values.OperationsCenter.Annotations | indent 8 }}
+{{- end }}
+      name: cjoc
+      labels:
+        com.cloudbees.cje.type: cjoc
+        com.cloudbees.cje.tenant: cjoc
+{{ include "cloudbees-core.labels" . | indent 8 }}
+        app.kubernetes.io/component: {{ .Values.OperationsCenter.Component | quote }}
+    spec:
+      affinity:
+        nodeAffinity:
+          # Schedule on linux nodes only.
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ include "os.label" . }}
+                operator: In
+                values:
+                  - linux
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              # Prefer nodes where there are no masters
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: com.cloudbees.cje.type
+                      operator: In
+                      values:
+                        - master
+            - weight: 1
+              # Prefer nodes where there are no agents
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: jenkins
+                      operator: In
+                      values:
+                        - slave
+      serviceAccountName: {{ .Values.rbac.serviceAccountName }}
+      {{- if .Values.OperationsCenter.NodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.OperationsCenter.NodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.OperationsCenter.Tolerations }}
+      tolerations:
+{{ toYaml .Values.OperationsCenter.Tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.OperationsCenter.Affinity }}
+      affinity:
+{{ toYaml .Values.OperationsCenter.Affinity | indent 8 }}
+      {{- end }}
+      securityContext:
+{{- if not (eq .Values.OperationsCenter.Platform "openshift") }}
+        runAsUser: {{ default 0 .Values.OperationsCenter.RunAsUser }}
+{{- if and (.Values.OperationsCenter.RunAsUser) (.Values.OperationsCenter.FsGroup) }}
+{{- if not (eq .Values.OperationsCenter.RunAsUser 0.0) }}
+        fsGroup: {{ .Values.OperationsCenter.FsGroup }}
+{{- end }}
+{{- end }}
+{{- end }}
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: jenkins
+        {{- with .Values.OperationsCenter.Image}}
+        image: "{{ .dockerImage }}"
+        imagePullPolicy: "{{ .dockerPullPolicy }}"
+        {{- end}}
+        env:
+        {{- if .Values.OperationsCenter.ContainerEnv }}
+{{ toYaml .Values.OperationsCenter.ContainerEnv | indent 8 }}
+        {{- end }}
+        - name:  MASTER_GLOBAL_JAVA_OPTIONS
+          # TODO perhaps use the map idiom from https://github.com/helm/helm/issues/3767#issuecomment-376769054
+          value: >-
+            {{- if or ((.Values.OperationsCenter.CSRF.ProxyCompatibility) (eq .Values.OperationsCenter.Platform "openshift")) }}
+            -Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true
+            {{- end }}
+            {{- if .Values.Master.JavaOpts }}
+            {{ .Values.Master.JavaOpts }}
+            {{- end }}
+        - name: ENVIRONMENT
+          value: KUBERNETES
+        {{- if or (.Values.OperationsCenter.ContextPath) (.Values.OperationsCenter.JenkinsOpts) }}
+        - name: JENKINS_OPTS
+          value: "{{- if .Values.OperationsCenter.ContextPath }}--prefix={{ .Values.OperationsCenter.ContextPath }}{{- end -}} {{- default "" .Values.OperationsCenter.JenkinsOpts}}"
+        {{- end }}
+        - name: JAVA_OPTS
+          # To allocate masters using a non-default storage class, add the following
+          # -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.storageClassName=some-storage-class
+          value: >-
+            -XshowSettings:vm
+            -Dcb.IMProp.warProfiles.cje=kubernetes.json
+            -Dhudson.DNSMultiCast.disabled=true
+            -Dcom.cloudbees.opscenter.analytics.reporter.JocAnalyticsReporter.PERIOD=120
+            -Dcom.cloudbees.opscenter.analytics.reporter.metrics.AperiodicMetricSubmitter.PERIOD=120
+            -Dcom.cloudbees.opscenter.analytics.FeederConfiguration.PERIOD=120
+            {{- if and (.Values.OperationsCenter.RunAsUser) (.Values.OperationsCenter.FsGroup) }}
+            {{- if not (eq .Values.OperationsCenter.RunAsUser 0.0) }}
+            {{- if eq .Values.OperationsCenter.Platform "openshift" }}
+            -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.fsGroup=
+            {{- else }}
+            -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.fsGroup={{ .Values.OperationsCenter.FsGroup }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            -Dhudson.lifecycle=hudson.lifecycle.ExitLifecycle
+            -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.disableAutoConfiguration=true
+            -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.masterImageName={{.Values.Master.Image.longName |quote}}
+            -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.masterImage={{ .Values.Master.Image.dockerImage}}
+            -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount={{ .Values.rbac.masterServiceAccountName }}
+            {{- if .Values.OperationsCenter.JavaOpts }}
+            {{ .Values.OperationsCenter.JavaOpts }}
+            {{- end }}
+            {{- if or ((.Values.OperationsCenter.CSRF.ProxyCompatibility) (eq .Values.OperationsCenter.Platform "openshift")) -}}
+            -Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true
+            {{- end }}
+        ports:
+        - containerPort: {{ .Values.OperationsCenter.ContainerPort }}
+          name: http
+        - containerPort: {{ .Values.OperationsCenter.AgentListenerPort}}
+        {{- if .Values.OperationsCenter.JMXPort }}
+        - containerPort: {{ .Values.OperationsCenter.JMXPort }}
+          name: jmx
+        {{- end }}
+        resources:
+          limits:
+            cpu: "{{ .Values.OperationsCenter.Cpu }}"
+            memory: "{{ .Values.OperationsCenter.Memory }}"
+          requests:
+            cpu: "1"
+            memory: "2G"
+
+        volumeMounts:
+{{- if .Values.Persistence.mounts }}
+{{ toYaml .Values.Persistence.mounts | indent 12 }}
+{{- end }}
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+          readOnly: false
+        - name: jenkins-configure-jenkins-groovy
+          mountPath: /var/jenkins_config/configure-jenkins.groovy.d
+          readOnly: true
+{{- if .Values.OperationsCenter.HealthProbes }}
+        livenessProbe:
+            httpGet:
+              path: {{ .Values.OperationsCenter.ContextPath }}/login
+              port: {{.Values.OperationsCenter.ContainerPort}}
+            initialDelaySeconds: {{ .Values.OperationsCenter.HealthProbesTimeout }}
+            timeoutSeconds: 5
+            failureThreshold: {{ .Values.OperationsCenter.HealthProbeLivenessFailureThreshold }}
+{{- end }}
+      volumes:
+{{- if .Values.Persistence.volumes }}
+{{ toYaml .Values.Persistence.volumes | indent 6 }}
+{{- end }}
+      - name: jenkins-configure-jenkins-groovy
+        configMap:
+          name: cjoc-configure-jenkins-groovy
+{{- if .Values.Persistence.Enabled }}
+  volumeClaimTemplates:
+  - metadata:
+{{- if .Values.Persistence.Annotations }}
+      annotations:
+{{ toYaml .Values.Persistence.Annotations | indent 4 }}
+{{- end }}
+      name: jenkins-home
+      labels:
+        app: cjoc
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      accessModes:
+        - {{ .Values.Persistence.AccessMode | quote }}
+      resources:
+        requests:
+          storage: {{ .Values.Persistence.Size | quote }}
+{{- if .Values.Persistence.StorageClass }}
+{{- if (eq "-" .Values.Persistence.StorageClass) }}
+      storageClassName: ""
+{{- else }}
+      storageClassName: "{{ .Values.Persistence.StorageClass }}"
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

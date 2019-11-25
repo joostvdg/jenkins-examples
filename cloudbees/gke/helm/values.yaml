@@ -1,0 +1,34 @@
+# A helm example values file for standard kubernetes install.
+# An nginx-ingress controller is not installed and ssl isn't installed.
+# Install an nginx-ingress controller
+nginx-ingress:
+  Enabled: false
+
+Persistence:
+    StorageClass: ssd
+
+# Master:
+#     OperationsCenterNamespace: cloudbees
+
+OperationsCenter:
+  # Set the HostName for the Operation Center
+  HostName: 'core.cb-gke.kearos.net'
+  # Setting ServiceType to ClusterIP creates ingress
+  ServiceType: ClusterIP
+  CSRF:
+    ProxyCompatibility: true
+  Ingress:
+    Annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "false"
+      nginx.ingress.kubernetes.io/app-root: https://$best_http_host/cjoc/teams-check/
+      nginx.ingress.kubernetes.io/proxy-body-size: 50m
+      nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+    ## Set this to true in order to enable TLS on the ingress record
+      Enable: true
+      # Create a certificate kubernetes and use it here.
+      SecretName: tls-core-cb-gke-kearos-net
+      Host: core.cb-gke.kearos.net

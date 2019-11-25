@@ -1,0 +1,21 @@
+{{- if .Values.OperationsCenter.Enabled -}}
+{{- if .Values.rbac.install }}
+{{- if .Values.rbac.installCluster }}
+{{- if not (eq .Values.OperationsCenter.Platform "openshift") -}}
+kind: ClusterRole
+apiVersion: {{ template "rbac.apiVersion" . }}
+metadata:
+  name: cjoc-master-management-{{ .Release.Namespace }}
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+rules:
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get","list"]
+# - apiGroups: [""]
+#   resources: ["namespaces"]
+#   verbs: ["create","delete","get","list","patch","update","watch"]
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,82 @@
+nginx-ingress:
+  Enabled: false
+  controller:
+    service:
+      externalTrafficPolicy: Local
+sidecarinjector:
+  Enabled: false
+OperationsCenter:
+  Enabled: true
+  Name: cjoc
+  Image:
+    dockerImage: cloudbees/cloudbees-cloud-core-oc:2.190.3.2
+    dockerPullPolicy: Always
+    longName: CloudBees Core - 2.190.2.2
+  Platform: standard
+  Component: jenkins-master
+  ContextPath: /cjoc
+  HostName: null
+  Protocol: http
+  Cpu: '1'
+  Memory: 2G
+  RunAsUser: 1000
+  FsGroup: 1000
+  ServicePort: 80
+  ServiceAgentListenerPort: 50000
+  AgentListenerPort: 50000
+  ServiceType: ClusterIP
+  ServiceAnnotations: {}
+  ContainerPort: 8080
+  HealthProbes: true
+  HealthProbesTimeout: 300
+  HealthProbeLivenessFailureThreshold: 12
+  CSRF:
+    ProxyCompatibility: false
+  LoadBalancerSourceRanges:
+  - 0.0.0.0/0
+  JavaOpts: null
+  NodeSelector: []
+  Tolerations: []
+  Annotations: {}
+  Ingress:
+    ApiVersion: extensions/v1beta1
+    Annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    tls:
+      Enable: false
+      SecretName: cloudbees-core-example-com-tls
+      Host: jenkins.cluster.local
+  Route:
+    tls:
+      Enable: false
+Master:
+  Enabled: true
+  OperationsCenterNamespace: null
+  Image:
+    dockerImage: cloudbees/cloudbees-core-mm:2.190.3.2
+    dockerPullPolicy: Always
+    longName: CloudBees Core - Managed Master - 2.190.3.2
+  JavaOpts: ''
+Agents:
+  Enabled: true
+Persistence:
+  Enabled: true
+  Annotations: {}
+  AccessMode: ReadWriteOnce
+  Size: 20Gi
+  volumes: null
+  mounts: null
+Hibernation:
+  Enabled: false
+  Image:
+    dockerImage: cloudbees/managed-master-hibernation-monitor:201.ad3b50f73a59
+    dockerPullPolicy: IfNotPresent
+rbac:
+  install: true
+  installCluster: true
+  serviceAccountName: cjoc
+  masterServiceAccountName: jenkins
+  hibernationMonitorServiceAccountName: managed-master-hibernation-monitor
+  apiGroup: ''
+  apiVersion: ''

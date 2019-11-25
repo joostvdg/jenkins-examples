@@ -1,0 +1,23 @@
+{{- if .Values.Hibernation.Enabled -}}
+{{- if eq .Values.OperationsCenter.Platform "openshift" -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: managed-master-hibernation-monitor
+spec:
+  host:  {{ required "A valid .Values.OperationsCenter.HostName entry required!" .Values.OperationsCenter.HostName | quote }}
+  path: /hibernation
+  to:
+    kind: Service
+    name: managed-master-hibernation-monitor
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
+        {{- if eq .Values.OperationsCenter.Route.tls.Enable true }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+        {{end }}
+{{- end -}}
+{{- end -}}

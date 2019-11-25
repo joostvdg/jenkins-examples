@@ -1,0 +1,39 @@
+{{- if .Values.OperationsCenter.Enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: cjoc
+  labels:
+{{ include "cloudbees-core.labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.OperationsCenter.Name | quote }}
+{{- if .Values.OperationsCenter.ServiceAnnotations }}
+  annotations:
+{{ toYaml .Values.OperationsCenter.ServiceAnnotations | indent 4 }}
+{{- end }}
+spec:
+  ports:
+    - name: http
+      port: {{.Values.OperationsCenter.ServicePort}}
+      targetPort: {{.Values.OperationsCenter.ContainerPort}}
+      protocol: TCP
+    {{- if (and (eq .Values.OperationsCenter.ServiceType "NodePort") (not (empty .Values.OperationsCenter.NodePort)))}}
+      nodePort: {{.Values.OperationsCenter.NodePort}}
+    {{- end}}
+    - name: jnlp
+      port: {{.Values.OperationsCenter.ServiceAgentListenerPort}}
+      targetPort: {{.Values.OperationsCenter.ServiceAgentListenerPort}}
+      protocol: TCP
+    {{- if (and (eq .Values.OperationsCenter.ServiceType "NodePort") (not (empty .Values.OperationsCenter.NodeJnlpPort)))}}
+      nodePort: {{.Values.OperationsCenter.NodeJnlpPort}}
+    {{- end}}
+  selector:
+    app.kubernetes.io/component: {{ .Values.OperationsCenter.Component | quote }}
+    com.cloudbees.cje.tenant: cjoc
+  type: {{.Values.OperationsCenter.ServiceType}}
+  {{- if eq .Values.OperationsCenter.ServiceType "LoadBalancer"}}
+  loadBalancerSourceRanges: {{.Values.OperationsCenter.LoadBalancerSourceRanges}}
+  {{- if .Values.OperationsCenter.LoadBalancerIP}}
+  loadBalancerIP: {{.Values.OperationsCenter.LoadBalancerIP}}
+  {{- end -}}
+  {{- end -}}
+{{- end -}}
