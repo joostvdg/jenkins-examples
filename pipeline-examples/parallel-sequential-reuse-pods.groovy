@@ -66,8 +66,6 @@ pipeline {
                         container('mavenjdk13') {
                             sh 'mvn -version'
                             sh 'mvn clean verify'
-                            sh 'cp -R target/ /tmp/cache/'
-                            sh 'ls -lath /tmp/cache/'
                         }
                     }
                 }

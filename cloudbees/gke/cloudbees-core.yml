@@ -389,7 +389,6 @@ spec:
         - name:  MASTER_GLOBAL_JAVA_OPTIONS
           # TODO perhaps use the map idiom from https://github.com/helm/helm/issues/3767#issuecomment-376769054
           value: >-
-            -Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true
         - name: ENVIRONMENT
           value: KUBERNETES
         - name: JENKINS_OPTS
@@ -409,7 +408,7 @@ spec:
             -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.disableAutoConfiguration=true
             -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.masterImageName="CloudBees Core - Managed Master - 2.190.3.2"
             -Dcom.cloudbees.jce.masterprovisioning.DockerImageDefinitionConfiguration.masterImage=cloudbees/cloudbees-core-mm:2.190.3.2
-            -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount=jenkins-Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true
+            -Dcom.cloudbees.masterprovisioning.kubernetes.KubernetesMasterProvisioning.serviceAccount=jenkins
         ports:
         - containerPort: 8080
           name: http

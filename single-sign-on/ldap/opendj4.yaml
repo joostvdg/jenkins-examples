@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendj4
+  labels:
+    app: opendj4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opendj4
+  template:
+    metadata:
+      labels:
+        app: opendj4
+    spec:
+      containers:
+      - name: opendj4
+        image: caladreas/opendj:4.4.3-1
+        ports:
+        - containerPort: 1389
+          name: ldap
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "50m"
+          limits:
+            memory: "500Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: opendj4
+  name: opendj4
+spec:
+  ports:
+    - name: http
+      port: 389
+      targetPort: 1389
+      protocol: TCP
+  selector:
+    app: opendj4
+

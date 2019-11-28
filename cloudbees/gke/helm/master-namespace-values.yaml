@@ -1,0 +1,14 @@
+# A helm example values file for standard kubernetes install.
+# An nginx-ingress controller is not installed and ssl isn't installed.
+# Install an nginx-ingress controller
+nginx-ingress:
+  Enabled: false
+
+Persistence:
+    StorageClass: ssd
+
+Master:
+    OperationsCenterNamespace: cloudbees
+
+OperationsCenter:
+    Enabled: false

@@ -15,8 +15,6 @@ OperationsCenter:
   HostName: 'core.cb-gke.kearos.net'
   # Setting ServiceType to ClusterIP creates ingress
   ServiceType: ClusterIP
-  CSRF:
-    ProxyCompatibility: true
   Ingress:
     Annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"

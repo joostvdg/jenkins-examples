@@ -1,0 +1,176 @@
+#
+# Copyright (c) 2010-2017 Evolveum
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+# This is an import LDIF file intended to create a some structure
+# for "example.com" organization including few users. It is used as an example.
+#
+
+dn: dc=example,dc=com
+objectclass: top
+objectclass: domain
+dc: example
+
+dn: ou=People, dc=example,dc=com
+objectclass: top
+objectclass: organizationalunit
+ou: People
+aci: (targetattr="*||+")(version 3.0; acl "IDM Access"; allow (all)
+  userdn="ldap:///uid=idm,ou=Administrators,dc=example,dc=com";)
+
+dn: uid=jwick, ou=People, dc=example,dc=com
+cn: John Wick
+sn: Wick
+givenname: John
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+ou: Operations
+ou: People
+l: New York
+uid: jwick
+mail: jwick@example.com
+telephonenumber: +1 408 555 1236
+facsimiletelephonenumber: +1 408 555 4323
+roomnumber: 233
+userpassword: w4HQL63gIuqe94Qf
+
+dn: uid=cptjack, ou=People, dc=example,dc=com
+cn: cpt. Jack Sparrow
+sn: Sparrow
+givenname: Jack
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+ou: Operations
+ou: People
+l: Caribbean
+uid: cptjack
+mail: jack@example.com
+telephonenumber: +421 910 123456
+facsimiletelephonenumber: +1 408 555 1111
+roomnumber: 666
+userpassword: Ls1zQCjb53E2YtoD
+
+dn: uid=will, ou=People, dc=example,dc=com
+cn: Will Turner
+sn: Turner
+givenname: William
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+ou: Operations
+ou: People
+l: Caribbean
+uid: will
+mail: will@example.com
+telephonenumber: +421 910 654321
+facsimiletelephonenumber: +1 408 555 1111
+roomnumber: 555
+userpassword: 0YyAefPv1EY6zA6f
+
+dn: uid=barbossa, ou=People, dc=example,dc=com
+cn: Hector Barbossa
+sn: Barbossa
+givenname: Hector
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+ou: Operations
+ou: People
+l: Caribbean
+uid: barbossa
+mail: captain.barbossa@example.com
+telephonenumber: +421 910 382734
+facsimiletelephonenumber: +1 408 555 1111
+roomnumber: 111
+userpassword: lS4PfTDILq58h1AE
+
+dn: uid=djones, ou=People, dc=example,dc=com
+cn: Davy Jones
+sn: Jones
+givenname: Davy
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+ou: Operations
+ou: People
+l: Caribbean
+uid: djones
+mail: d.jones@example.com
+telephonenumber: +421 910 382735
+facsimiletelephonenumber: +1 408 555 1112
+roomnumber: 112
+userpassword: 7FGa7kgmN1j5L4oW
+
+dn: ou=Groups, dc=example,dc=com
+objectclass: top
+objectclass: organizationalunit
+ou: Groups
+aci: (targetattr="*||+")(version 3.0; acl "IDM Access"; allow (all)
+  userdn="ldap:///uid=idm,ou=Administrators,dc=example,dc=com";)
+
+dn: cn=Pirates,ou=Groups,dc=example,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: Pirates
+ou: Groups
+uniquemember: uid=cptjack, ou=People, dc=example,dc=com
+uniquemember: uid=will, ou=People, dc=example,dc=com
+uniquemember: uid=djones, ou=People, dc=example,dc=com
+description: Arrrrr!
+
+dn: cn=Continental,ou=Groups,dc=example,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: Continental
+ou: Groups
+uniquemember: uid=jwick, ou=People, dc=example,dc=com
+description: Continental!
+
+dn: cn=Catmins,ou=Groups,dc=example,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: Catmins
+ou: Groups
+uniquemember: uid=barbossa, ou=People, dc=example,dc=com
+uniquemember: uid=djones, ou=People, dc=example,dc=com
+description: Purrrr!
+
+dn: ou=Administrators, dc=example,dc=com
+objectclass: top
+objectclass: organizationalunit
+ou: Administrators
+
+dn: uid=idm, ou=Administrators,dc=example,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+uid: idm
+cn: IDM Administrator
+sn: IDM Administrator
+description: Special LDAP acccount used by the IDM
+  to access the LDAP data.
+ou: Administrators
+userPassword: secret
+ds-privilege-name: unindexed-search
+ds-privilege-name: password-reset
