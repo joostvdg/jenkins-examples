@@ -74,7 +74,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(http_responseCodes_ok_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) \nby (app_kubernetes_io_instance) / \nsum(http_requests_count{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) \nby (app_kubernetes_io_instance)",
+            "expr": "sum(http_responseCodes_ok_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) \nby (app_kubernetes_io_instance) / \nsum(http_requests_count{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) \nby (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -183,7 +183,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "http_responseCodes_serverError_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "http_responseCodes_serverError_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -278,7 +278,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum (jenkins_job_waiting_duration{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum (jenkins_job_waiting_duration{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -367,7 +367,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(jenkins_job_building_duration{quantile="0.5",kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})\nby (app_kubernetes_io_instance) / 60",
+            "expr": "sum(jenkins_job_building_duration{quantile="0.5",kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})\nby (app_kubernetes_io_instance) / 60",
             "format": "time_series",
             "instant": false,
             "interval": "",
@@ -376,7 +376,7 @@
             "refId": "A"
           },
           {
-            "expr": "sum(jenkins_node_builds{quantile="0.999",kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})\nby (app_kubernetes_io_instance) / 60",
+            "expr": "sum(jenkins_node_builds{quantile="0.999",kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})\nby (app_kubernetes_io_instance) / 60",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "p999-{{app_kubernetes_io_instance}}",
@@ -466,7 +466,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(jenkins_health_check_duration{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance", quantile="0.99"}) \n    by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_health_check_duration{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance", quantile="0.99"}) \n    by (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -552,7 +552,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(http_requests{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance",quantile="0.99"} ) by (app_kubernetes_io_instance)",
+            "expr": "sum(http_requests{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance",quantile="0.99"} ) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -792,7 +792,7 @@
         "tableColumn": "",
         "targets": [
           {
-            "expr": "sum(jenkins_health_check_score{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})",
+            "expr": "sum(jenkins_health_check_score{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "",
@@ -862,7 +862,7 @@
         ],
         "targets": [
           {
-            "expr": "jenkins_health_check_score{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "jenkins_health_check_score{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -925,7 +925,7 @@
         "pluginVersion": "6.2.4",
         "targets": [
           {
-            "expr": "sum(jenkins_runs_success_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})\nby (app_kubernetes_io_instance) /\nsum(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})\nby (app_kubernetes_io_instance) * 100",
+            "expr": "sum(jenkins_runs_success_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})\nby (app_kubernetes_io_instance) /\nsum(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})\nby (app_kubernetes_io_instance) * 100",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -980,7 +980,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(jenkins_queue_size_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_queue_size_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -1091,7 +1091,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(increase(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
+            "expr": "sum(increase(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 1,
@@ -1099,7 +1099,7 @@
             "refId": "A"
           },
           {
-            "expr": "sum(increase(jenkins_runs_failure_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
+            "expr": "sum(increase(jenkins_runs_failure_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 1,
@@ -1107,7 +1107,7 @@
             "refId": "B"
           },
           {
-            "expr": "sum(increase(jenkins_runs_aborted_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
+            "expr": "sum(increase(jenkins_runs_aborted_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}[24h])) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 1,
@@ -1196,7 +1196,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(jenkins_executor_in_use_history{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_executor_in_use_history{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -1280,7 +1280,7 @@
         "reverseYBuckets": false,
         "targets": [
           {
-            "expr": "sum(increase(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}[2h])) by (app_kubernetes_io_instance)",
+            "expr": "sum(increase(jenkins_runs_total_total{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}[2h])) by (app_kubernetes_io_instance)",
             "format": "heatmap",
             "instant": false,
             "interval": "",
@@ -1370,7 +1370,7 @@
         ],
         "targets": [
           {
-            "expr": "jenkins_plugins_active{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "jenkins_plugins_active{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1436,7 +1436,7 @@
         ],
         "targets": [
           {
-            "expr": "sum(jenkins_plugins_withUpdate{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_plugins_withUpdate{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1505,7 +1505,7 @@
         ],
         "targets": [
           {
-            "expr": "jenkins_job_count_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "jenkins_job_count_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1571,7 +1571,7 @@
         ],
         "targets": [
           {
-            "expr": "sum(jenkins_node_offline_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_node_offline_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1639,7 +1639,7 @@
         ],
         "targets": [
           {
-            "expr": "vm_uptime_milliseconds{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"} / 3600000 ",
+            "expr": "vm_uptime_milliseconds{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"} / 3600000 ",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1707,7 +1707,7 @@
         ],
         "targets": [
           {
-            "expr": "sum(jenkins_executor_count_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(jenkins_executor_count_value{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -1771,7 +1771,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "1 - sum(vm_gc_G1_Young_Generation_time{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"})by (app_kubernetes_io_instance) \n/ \nsum (vm_uptime_milliseconds{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "1 - sum(vm_gc_G1_Young_Generation_time{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"})by (app_kubernetes_io_instance) \n/ \nsum (vm_uptime_milliseconds{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -1877,7 +1877,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "sum(vm_memory_heap_usage{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}) by (app_kubernetes_io_instance)",
+            "expr": "sum(vm_memory_heap_usage{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}) by (app_kubernetes_io_instance)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -1977,7 +1977,7 @@
         "steppedLine": true,
         "targets": [
           {
-            "expr": "vm_cpu_load{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "vm_cpu_load{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 5,
@@ -2067,7 +2067,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "vm_memory_total_used{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "vm_memory_total_used{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{app_kubernetes_io_instance}}",
@@ -2247,7 +2247,7 @@
         },
         "targets": [
           {
-            "expr": "vm_file_descriptor_ratio{kubernetes_namespace=~"$namespace", app_kubernetes_io_instance=~"$instance"}",
+            "expr": "vm_file_descriptor_ratio{kubernetes_namespace=~"$namespace", app_kubernetes_io_name=~"$instance"}",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
