@@ -1,0 +1,20 @@
+<com.cloudbees.opscenter.server.casc.BundleStorage_-AccessControl>
+    <access>
+        <entry>
+            <string>mm1</string>
+            <hudson.util.Secret>abc123def456</hudson.util.Secret>
+        </entry>
+        <entry>
+            <string>mm2</string>
+            <hudson.util.Secret>zyx987wvu654</hudson.util.Secret>
+        </entry>
+        <entry>
+            <string>mm3</string>
+            <hudson.util.Secret>a89ds89sd89ds</hudson.util.Secret>
+        </entry>
+        <entry>
+            <string>mm4</string>
+            <hudson.util.Secret>kjdskjhdsjkhsdf</hudson.util.Secret>
+        </entry>	   
+    </access>
+</com.cloudbees.opscenter.server.casc.BundleStorage_-AccessControl>
