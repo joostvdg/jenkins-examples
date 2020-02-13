@@ -19,6 +19,57 @@ You can first create a Managed Master how you want it to be. Then export its CAS
 
 You do this, by going to the following URL `<masterUrl>/core-casc-export`.
 
+## Freestyle Job
+
+The bash command to execute.
+
+```bash
+cp -R casc/* ${JENKINS_HOME}/jcasc-bundles-store
+ls -lath ${JENKINS_HOME}/jcasc-bundles-store
+```
+
+### XML
+
+```xml
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.1.1">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/joostvdg/jenkins-examples.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cp -R casc/* ${JENKINS_HOME}/jcasc-bundles-store
+ls -lath ${JENKINS_HOME}/jcasc-bundles-store</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
+```
+
 ## Repository Structure
 
 ```bash
