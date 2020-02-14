@@ -1,0 +1,2 @@
+cloudbees/aks/terraform/.terraform/
+**/terraform.tfstate
