@@ -1,0 +1,24 @@
+nginx:
+  rbac:
+    create: true
+  defaultBackend:
+    enabled: false
+  controller:
+    ingressClass: "nginx"
+    service:
+      externalTrafficPolicy: "Local"
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 3
+    publishService:
+      enabled: true
+    metrics:
+      enabled: true
+      
+certman:
+  prometheus:
+    enabled: true
+  ingressShim:
+    defaultIssuerName: letsencrypt 
+    defaultIssuerKind: ClusterIssuer

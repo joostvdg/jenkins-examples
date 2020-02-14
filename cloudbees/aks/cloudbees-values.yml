@@ -1,0 +1,48 @@
+keycloak:
+  keycloak:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: letsencrypt-production
+      enabled: true
+      hosts:
+      - sso.aks.kearos.net
+      tls:
+      - hosts:
+        - sso.aks.kearos.net
+        secretName: sso-aks.kearos-net-tls
+    password: 2z!2%fnVVy*&k!SOcap17wIq
+    persistence:
+      dbHost: cloudbees-keycloakdb
+      dbName: keycloak
+      dbPassword: keycloak
+      dbPort: 5432
+      dbUser: keycloak
+      dbVendor: postgres
+      deployPostgres: false
+keycloakdb:
+  metrics:
+    enabled: true
+  postgresqlDatabase: keycloak
+  postgresqlPassword: keycloak
+  postgresqlUsername: keycloak
+core:
+  OperationsCenter:
+    HostName: core.aks.kearos.net
+    JavaOpts: "-XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions"
+    Annotations:
+      prometheus.io/path: "/prometheus"
+      prometheus.io/port: "8080"
+      prometheus.io/scrape: "true"
+    Ingress:
+      Annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+      tls:
+        Enable: true
+        Host: core.aks.kearos.net
+        SecretName: core-aks.kearos-net-tls
+    ServiceType: ClusterIP
+  Persistence:
+    StorageClass: managed-premium
+  nginx-ingress:
+    Enabled: false

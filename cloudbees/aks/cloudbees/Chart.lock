@@ -1,0 +1,15 @@
+dependencies:
+- name: opendj4
+  repository: https://raw.githubusercontent.com/joostvdg/helm-repo/master/
+  version: 0.3.1
+- name: keycloak
+  repository: https://codecentric.github.io/helm-charts
+  version: 6.2.0
+- name: postgresql
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 8.3.3
+- name: cloudbees-core
+  repository: https://charts.cloudbees.com/public/cloudbees
+  version: 3.9.0+c3d55aeaee57
+digest: sha256:544268a7e54e7e454c9f2c5043f6041823c66f408996378b63a1f27d4155bb32
+generated: "2020-02-13T18:21:08.353071+01:00"

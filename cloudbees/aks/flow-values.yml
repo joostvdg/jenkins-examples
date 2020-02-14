@@ -1,0 +1,51 @@
+flow:
+  workloads:
+    server:
+      zk:
+        host: flowrq-zookeeper
+        port: 2181
+  server:
+    zk:
+      host: flowrq-zookeeper
+      port: 2181
+  zookeeper:
+    enabled: false
+  ingress:
+    enabled: true
+    host: flow.aks.kearos.net
+    # certificate:
+    #   existingSecret: flow-aks.kearos-net-tls
+    annotations:
+      kubernetes.io/ingress.class: flow-ingress
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      nginx.ingress.kubernetes.io/affinity: "cookie"
+      nginx.ingress.kubernetes.io/session-cookie-name: "route"
+      nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+      nginx.ingress.kubernetes.io/proxy-body-size: "10G"
+      nginx.ingress.kubernetes.io/secure-backends: "false"
+  storage:
+    volumes:
+      serverPlugins:
+        name: flow-server-shared
+        accessMode: ReadWriteMany
+        storageClass: azurefile
+        storage: 50Gi
+      repositoryStorage:
+        name: flow-repo-artifacts
+        accessMode: ReadWriteOnce
+        storage: 20Gi
+        storageClass: default
+      doisStorage:
+        name: elasticsearch-data
+        accessMode: ReadWriteOnce
+        storage: 10Gi
+        storageClass: managed-premium
+  database:
+    clusterEndpoint: flowrq-flowdb
+    dbName: flow
+    dbUser: root
+    dbPassword: 4dDDPE5nj3dVPxDYsPgCzu9B
+    dbPort: 3306
+    dbType: mysql
+  flowCredentials:
+    adminPassword: fmpQtBWHrcA242JwEd9jD2Xx
