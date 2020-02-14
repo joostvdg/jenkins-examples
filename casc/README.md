@@ -2,6 +2,15 @@
 
 This is about [Configuration as Code for CloudBees Core](https://docs.beescloud.com/docs/cloudbees-core/latest/cloud-admin-guide/core-casc-modern).
 
+As of this writing - February 2020 - there's no UI component. 
+In order to see if the Master is picking up the bundle, check the Master's logs.
+
+```bash
+2020-02-13 17:45:33.342+0000 [id=26] INFO c.c.j.c.i.c.ConfigurationBundleManager$Loader#getLoader: Resolving loader from /var/casc-bundle/bundle-link.yaml
+2020-02-13 17:45:42.185+0000 [id=26] INFO c.c.j.c.i.CJPPluginManager$StartUp$1#apply: Core Configuration as Code is enabled
+2020-02-13 17:45:42.186+0000 [id=26] INFO c.c.j.c.i.CJPPluginManager$StartUp$1#apply: Using JCasC config: /var/jenkins_home/core-casc-bundle/jenkins.yaml
+```
+
 ## Steps
 
 * install a git client on Operations Center
@@ -20,6 +29,8 @@ You can first create a Managed Master how you want it to be. Then export its CAS
 You do this, by going to the following URL `<masterUrl>/core-casc-export`.
 
 ## Freestyle Job
+
+URL to checkout: `https://github.com/joostvdg/jenkins-examples.git`
 
 The bash command to execute.
 
