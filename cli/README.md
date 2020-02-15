@@ -12,6 +12,9 @@ First we need to retrieve the CloudBees CLI from the Operations Center.
 
 ```bash
 export CJOC_URL=https://core.cb-gke.kearos.net/cjoc/
+```
+
+```bash
 http --download ${CJOC_URL}/jnlpJars/jenkins-cli.jar --verify false
 ```
 
@@ -44,7 +47,7 @@ TKN=11b9902cdef8805aa5c19c6198a54ea0ee
 ```
 
 ```bash
-alias cboc="java -jar jenkins-cli.jar -noKeyAuth -auth ${USR}:${TKN} -s ${CJOC_URL}"
+m
 ```
 
 ### Verify
