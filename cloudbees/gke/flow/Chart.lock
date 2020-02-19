@@ -1,0 +1,6 @@
+dependencies:
+- name: cloudbees-flow
+  repository: https://charts.cloudbees.com/public/cloudbees
+  version: 1.1.0
+digest: sha256:ee28cf6dbf1103b334c39362536825f871a6516b5d2dfefd559caceccc9ea6a9
+generated: "2020-02-14T18:35:04.199781+01:00"

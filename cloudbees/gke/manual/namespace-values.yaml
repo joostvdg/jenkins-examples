@@ -1,0 +1,12 @@
+nginx-ingress:
+  Enabled: false
+
+Persistence:
+    StorageClass: ssd
+
+Master:
+    OperationsCenterNamespace: cloudbees-core
+
+OperationsCenter:
+    Enabled: false
+

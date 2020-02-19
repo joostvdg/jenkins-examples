@@ -1,0 +1,8 @@
+nginx-ingress:
+  Enabled: false
+
+Persistence:
+    StorageClass: ssd
+
+OperationsCenter:
+  HostName: '34.90.218.161.nip.io'

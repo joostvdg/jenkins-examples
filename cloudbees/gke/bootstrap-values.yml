@@ -1,0 +1,30 @@
+nginx:
+  service:
+    omitClusterIP: true
+  controller:
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 7
+    publishService:
+      enabled: true
+    metrics:
+      enabled: true
+      
+certman:
+  prometheus:
+    enabled: true
+  ingressShim:
+    defaultIssuerName: letsencrypt 
+    defaultIssuerKind: ClusterIssuer
+
+dns:
+  provider: google
+  domainFilters: 
+    - "dev.gke.kearos.net"
+  metrics:
+    enabled: true
+
+nfs:
+  persistence:
+    accessMode: ReadWriteMany

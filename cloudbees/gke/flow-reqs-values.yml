@@ -1,0 +1,42 @@
+flowdb:
+  mysqlUser: flowadmin
+  mysqlPassword: JFjec3c7MgFH6cZyKaVNaC2F
+  mysqlRootPassword: 4dDDPE5nj3dVPxDYsPgCzu9B
+  metrics:
+    enabled: true
+  persistence:
+    enabled: true
+    size: 50Gi
+    storageClass: ssd
+  initializationFiles: 
+    first-db.sql: |-
+      CREATE DATABASE IF NOT EXISTS flow DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;
+      GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
+      FLUSH PRIVILEGES;
+  configurationFiles:
+    mysql.cnf: |-
+      [client]
+      default-character-set = utf8
+      [mysql]
+      default-character-set = utf8
+      [mysqld]
+      character-set-server=utf8
+      collation-server=utf8_unicode_ci
+
+
+zookeeper:
+  persistence:
+    storageClass: ssd
+  replicaCount: 3
+  podLabels:
+    ownerApp: "cloudbees-flow"
+    role: "cluster-coordinator"
+    mode: "private"
+  resources:
+    limits:
+      cpu: "250m"
+      memory: "512Mi"
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+

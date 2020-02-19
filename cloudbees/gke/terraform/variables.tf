@@ -17,7 +17,7 @@ variable "location" {
 
 variable "cluster_master_version" {
   description = "The minimum kubernetes version for the master nodes"
-  default     = "1.14.8-gke.17"
+  default     = "1.15.9-gke.8"
 }
 
 variable "np1count" {
@@ -27,5 +27,5 @@ variable "np1count" {
 
 variable "np2count" {
   description = "The initial Node Count for NodePool 2"
-  default     = 0
+  default     = 1
 }
