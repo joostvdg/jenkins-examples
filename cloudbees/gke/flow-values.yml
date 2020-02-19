@@ -13,8 +13,8 @@ flow:
   ingress:
     enabled: true
     host: flow.kearos.net
-    # certificate:
-    #   existingSecret: flow-aks.kearos-net-tls
+    certificate:
+      existingSecret: tls-flow-kearos-net
     annotations:
       kubernetes.io/ingress.class: flow-ingress
       cert-manager.io/cluster-issuer: letsencrypt-production

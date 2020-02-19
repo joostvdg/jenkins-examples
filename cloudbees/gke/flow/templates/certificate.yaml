@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: tls-flow-kearos-net
+  namespace: flow
+spec:
+  dnsNames:
+  - flow.kearos.net
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: flow-issuer
+  secretName: tls-flow-kearos-net
