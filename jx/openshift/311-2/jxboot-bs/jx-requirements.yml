@@ -1,0 +1,82 @@
+autoUpdate:
+  enabled: false
+  schedule: ""
+bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config.git
+cluster:
+  clusterName: rhos311
+  devEnvApprovers:
+  - jvandergriendt
+  dockerRegistryOrg: jvandergriendt
+  environmentGitOwner: jx
+  gitKind: bitbucketserver
+  gitName: bs
+  gitServer: https://bitbucket.apps.ocp.kearos.net
+  namespace: jx
+  provider: kubernetes
+  registry: docker-registry-default.apps.ocp.kearos.net:443
+environments:
+- ingress:
+    domain: apps.ocp.kearos.net
+    externalDNS: false
+    ignoreLoadBalancer: true
+    namespaceSubDomain: -jx.
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: dev
+  repository: env-dev
+- ingress:
+    domain: staging.apps.ocp.kearos.net
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: staging
+  repository: env-staging
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: production
+  repository: env-prod
+gitops: true
+ingress:
+  domain: apps.ocp.kearos.net
+  externalDNS: false
+  ignoreLoadBalancer: true
+  namespaceSubDomain: -jx.
+  tls:
+    email: ""
+    enabled: false
+    production: false
+kaniko: true
+repository: bucketrepo
+secretStorage: local
+storage:
+  backup:
+    enabled: false
+    url: ""
+  logs:
+    enabled: true
+    url: https://bitbucket.apps.ocp.kearos.net/scm/jx/build-logs.git
+  reports:
+    enabled: false
+    url: ""
+  repository:
+    enabled: true
+    url: https://bitbucket.apps.ocp.kearos.net/scm/jx/bucketrepo.git
+vault: {}
+velero:
+  schedule: ""
+  ttl: ""
+versionStream:
+  ref: v1.0.361
+  url: https://github.com/jenkins-x/jenkins-x-versions.git
+webhook: lighthouse

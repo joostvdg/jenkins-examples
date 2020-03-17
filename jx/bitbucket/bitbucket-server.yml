@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bitbucket
+  name: bitbucket
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: bitbucket
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: bitbucket
+spec:
+  rules:
+  - host: bitbucket.apps.ocp.kearos.net
+    http:
+      paths:
+      - backend:
+          serviceName: bitbucket
+          servicePort: 80
+  tls: # < placing a host in the TLS config will indicate a certificate should be created
+  - hosts:
+    - bitbucket.apps.ocp.kearos.net
+    secretName: acme-crt-secret # < cert-manager will store the created certificate in this secret.
+--- 
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bitbucket
+spec:
+  serviceName: "bitbucket"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bitbucket
+  template:
+    metadata:
+      labels:
+        app: bitbucket
+    spec:
+      containers:
+      - name: bitbucket
+        image: atlassian/bitbucket-server:7.0.1-jdk11
+        ports:
+        - containerPort: 7990
+          name: http
+        - containerPort: 7999
+          name: web
+        volumeMounts:
+        - name: data
+          mountPath: /var/atlassian/application-data/bitbucket
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi

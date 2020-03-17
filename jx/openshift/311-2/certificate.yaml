@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: ocp-kearos-net
+spec:
+  secretName: acme-crt-secret
+  dnsNames:
+  - apps.ocp.kearos.net
+  - "*.apps.ocp.kearos.net"    
+  issuerRef:
+    name: letsencrypt-prod
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: Issuer
+    group: cert-manager.io

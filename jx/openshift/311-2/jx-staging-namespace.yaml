@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jx-staging
+  labels:
+    jenkins.io/created-by: "jx-boot"
+    env: "staging"
+    team: "jx"

@@ -1,0 +1,82 @@
+autoUpdate:
+  enabled: false
+  schedule: ""
+bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config.git
+cluster:
+  clusterName: rhos11
+  devEnvApprovers:
+  - jvandergriendt
+  environmentGitOwner: jx
+  gitKind: bitbucketserver
+  gitName: bs
+  gitServer: http://bitbucket.openshift.kearos.net
+  namespace: jx
+  provider: kubernetes
+  registry: docker.io
+environments:
+- ingress:
+    domain: openshift.kearos.net
+    externalDNS: false
+    ignoreLoadBalancer: true
+    namespaceSubDomain: -jx.
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: dev
+  repository: environment-rhos11-dev
+- ingress:
+    domain: staging.openshift.kearos.net
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: staging
+  repository: env-rhos311-staging
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: production
+  repository: env-rhos311-prod
+gitops: true
+ingress:
+  domain: openshift.kearos.net
+  externalDNS: false
+  ignoreLoadBalancer: true
+  namespaceSubDomain: -jx.
+  tls:
+    email: ""
+    enabled: false
+    production: false
+kaniko: true
+repository: nexus
+secretStorage: local
+storage:
+  backup:
+    enabled: false
+    url: ""
+  logs:
+    enabled: false
+    url: ""
+  reports:
+    enabled: false
+    url: ""
+  repository:
+    enabled: false
+    url: ""
+vault: {}
+velero:
+  schedule: ""
+  ttl: ""
+versionStream:
+  ref: v1.0.361
+  url: https://github.com/jenkins-x/jenkins-x-versions.git
+webhook: lighthouse
+
