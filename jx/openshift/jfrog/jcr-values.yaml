@@ -1,0 +1,15 @@
+artifactory:
+  nginx:
+    enabled: false
+  artifactory:
+    service:
+        type: ClusterIP
+    ingress:
+      enabled: true
+      hosts:
+        - jcr.apps.ocp.kearos.net
+      annotations:
+      tls:
+        - secretName: acme-crt-secret
+          hosts:
+            - jcr.apps.ocp.kearos.net

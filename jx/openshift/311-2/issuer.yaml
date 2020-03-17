@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: joostvdg@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        clouddns:
+          project: ps-dev-201405
+          serviceAccountSecretRef:
+            key: credentials.json
+            name: external-dns-gcp-sa
