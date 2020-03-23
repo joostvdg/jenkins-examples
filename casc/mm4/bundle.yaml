@@ -6,5 +6,6 @@ plugins:
 jcasc:
   - "jenkins.yaml"
   - "kubernetes.yaml"
+  - "libraries.yaml"
 #catalog:
 #  - "plugin-catalog.yaml"
