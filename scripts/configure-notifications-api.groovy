@@ -1,3 +1,4 @@
+import com.cloudbees.jenkins.plugins.notification.api.NotificationConfiguration
 import com.cloudbees.opscenter.plugins.notification.OperationsCenterRouter
 
 println("=== Configuring Notifications API == Start")
