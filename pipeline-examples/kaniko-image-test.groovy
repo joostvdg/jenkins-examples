@@ -1,11 +1,10 @@
+// https://github.com/GoogleContainerTools/kaniko/issues/835
 pipeline {
     agent none
     environment {
-        CJOC_URL    = 'http://cjoc/cjoc'
-        REGISTRY    = 'index.docker.io'
         REPO        = 'caladreas'
         IMAGE       = 'jnlp-test'
-        TAG         = "0.1.${BUILD_NUMBER}"
+        TAG         = "0.21.${BUILD_NUMBER}"
     }
     stages {
         stage('Image Build') {
@@ -16,26 +15,29 @@ pipeline {
                         //cloud 'kubernetes'
                         label 'kaniko-jre-test'
                         yaml """
+kind: Pod
+metadata:
+  name: kaniko
 spec:
   containers:
-  - command:
-    - "/busybox/cat"
-    image: "gcr.io/kaniko-project/executor:debug"
-    imagePullPolicy: "Always"
-    name: "kaniko"
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command:
+    - /busybox/cat
     tty: true
     volumeMounts:
-    - mountPath: "/root"
-      name: "jenkins-docker-cfg"
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
   volumes:
-  - name: "jenkins-docker-cfg"
+  - name: jenkins-docker-cfg
     projected:
       sources:
       - secret:
+          name: docker-credentials
           items:
-          - key: ".dockerconfigjson"
-            path: ".docker/config.json"
-          name: "docker-credentials"
+            - key: .dockerconfigjson
+              path: config.json
 """
                         }
                     }
@@ -46,19 +48,14 @@ spec:
                             }
                         }
                         stage('Build with Kaniko') {
-                            environment { 
-                                PATH = "/busybox:/kaniko:$PATH"
-                            }
                             steps {
-                                sh 'echo image fqn=${REGISTRY}/${REPO}/${IMAGE}:${TAG}'
+                                sh 'echo image fqn=${REPO}/${IMAGE}:${TAG}'
                                 container(name: 'kaniko', shell: '/busybox/sh') {
-                                    // 1 - Kaniko only pushes to one tag at a time, does not create latest automatically
-                                    // 2 - --cache=true leverages the destintation as cache repository
-                                    // 3 - --cache-dir 
-                                    // kaniko can leverage two destination targets
-                                    sh '''#!/busybox/sh
-                                    /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cleanup --cache=true --destination=${REGISTRY}/${REPO}/${IMAGE}:${TAG} --destination=${REGISTRY}/${REPO}/${IMAGE}:latest
-                                    '''
+                                    withEnv(['PATH+EXTRA=/busybox']) {
+                                        sh '''#!/busybox/sh
+                                        /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cleanup --cache=true --destination=${REPO}/${IMAGE}:${TAG} --destination=${REGISTRY}/${REPO}/${IMAGE}:latest
+                                        '''
+                                    }
                                 }
                             }
                         }
@@ -74,7 +71,7 @@ spec:
                             label 'agent-test'
                             containerTemplate {
                                 name 'agent'
-                                image "${REGISTRY}/${REPO}/${IMAGE}:${TAG}"
+                                image "${REPO}/${IMAGE}:${TAG}"
                                 ttyEnabled true
                                 command 'cat'
                             }
@@ -100,4 +97,3 @@ spec:
         }
     }
 }
-
