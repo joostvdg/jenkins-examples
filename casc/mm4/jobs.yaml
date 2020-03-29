@@ -1,0 +1,24 @@
+jobs:
+  - script: >
+      folder('testjobs')
+  - script: >
+      pipelineJob('testjobs/maven-agent') {
+        definition {
+          cps {
+            script("""\
+              pipeline {
+                agent { label 'maven-jdk11' } 
+                stages {
+                  stage ('test maven') {
+                    steps {
+                      echo "hello"
+                      container('maven') {
+                        sh 'mvn version'
+                      }
+                    }
+                  }
+                }
+              }""".stripIndent())
+          }
+        }
+      }

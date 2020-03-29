@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "Jenkins configured using CasC - mm1."
+  systemMessage: "Jenkins configured using JCasC - mm1!"
   numExecutors: 0
   mode: NORMAL
   crumbIssuer:

@@ -1,0 +1,45 @@
+unclassified:
+  globalLibraries:
+    libraries:
+    - defaultVersion: "master"
+      implicit: true
+      name: "jpl-podtemplates"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-podtemplates.git"
+              traits:
+              - cloneOptionTrait:
+                  extension:
+                    depth: 1
+                    noTags: true
+                    shallow: true
+    - defaultVersion: "master"
+      implicit: true
+      name: "jpl-core"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-core.git"
+              traits:
+              - cloneOptionTrait:
+                  extension:
+                    depth: 1
+                    noTags: true
+                    shallow: true
+    - defaultVersion: "master"
+      implicit: true
+      name: "jpl-maven"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-maven.git"
+              traits:
+              - cloneOptionTrait:
+                  extension:
+                    depth: 1
+                    noTags: true
+                    shallow: true

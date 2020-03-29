@@ -143,3 +143,5 @@ plugins:
 - id: "workflow-job"
 - id: "workflow-cps-global-lib"
 - id: "display-url-api"
+- id: "job-dsl"
+- id: "cloudbees-jenkins-advisor"
