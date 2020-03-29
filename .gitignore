@@ -4,5 +4,6 @@ cloudbees/aks/terraform/.terraform/
 
 **/*/terraform.tfstate
 **/*/terraform.tfstate.backup
+**/.terraform/plugins
 
 **/*/plan.out
