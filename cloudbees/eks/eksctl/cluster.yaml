@@ -1,0 +1,44 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster-jvandergriendt
+  region: us-east-1
+  version: "1.15"
+  tags: 
+    CreatedBy: jvandergriendt
+
+nodeGroups:
+  - name: ng1-masters
+    instanceType: m5.large
+    minSize: 2
+    maxSize: 8
+    volumeSize: 100
+    volumeType: gp2
+    labels:
+      nodegroup-type: masters
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+  - name: ng2-builds
+    minSize: 2
+    maxSize: 8
+    volumeSize: 100
+    volumeType: gp2
+    labels:
+      nodegroup-type: builds
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+    instancesDistribution:
+      maxPrice: 0.017
+      instanceTypes: ["t3.medium", "t2.medium"] # At least one instance type should be specified
+      onDemandBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 50
+      spotInstancePools: 2
+  - name: ng3-windows
+    amiFamily: WindowsServer2019FullContainer
+    minSize: 1
+    maxSize: 2
+
+availabilityZones: ["us-east-1d", "us-east-1f"]

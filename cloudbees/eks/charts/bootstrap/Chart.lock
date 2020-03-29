@@ -1,0 +1,12 @@
+dependencies:
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 1.34.2
+- name: efs-provisioner
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.11.0
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v0.13.0
+digest: sha256:5222da69d9fefc2197a51fb04e54935c24a09c40ae4e123c5c116a1435ec9f16
+generated: "2020-03-22T21:45:11.589572+01:00"
