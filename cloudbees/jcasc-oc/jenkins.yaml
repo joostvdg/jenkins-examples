@@ -19,8 +19,8 @@ jenkins:
 unclassified:
   kubernetesMasterProvisioning:
     clusterEndpoints:
-    - name: "openshift2"
-      url: "https://core.cb-eks.kearos.net/cjoc"
+    - name: "openshift"
+      url: "https://api.ocp.kearos.net"
       skipTlsVerify: true
       credentialsId: "osuserme"
       namespace: "cb-mm1"
