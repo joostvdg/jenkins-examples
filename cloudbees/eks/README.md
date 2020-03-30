@@ -212,6 +212,152 @@ spec:
         nodegroup-type: masters
 ```
 
+## Multi Cluster
+
+* https://docs.cloudbees.com/docs/cloudbees-core/latest/cloud-admin-guide/multiple-clusters
+* https://joostvdg.github.io/cloudbees/multi-cluster/
+
+### Process
+
+* create credential of type `openshift username password`
+* this time, really use the password you use to login via `oc login` and NOT the bearertoken you put in `~/kube/config`
+* I also had to disable the TLS verification (disable HTTPS validation in UI, in script -> `skipTlsVerify`)
+    * might be only a UI bug though
+
+```sh
+oc apply -f cb-core-install-role.yml -n cb-mm1
+oc apply -f cb-core-install-role.yml
+oc adm policy add-role-to-user cb-core-install cbcore --role-namespace cb-mm1 --namespace cb-mm1
+oc adm policy add-role-to-user cjoc-master-management system:serviceaccount:cb-mm1:jenkins --role-namespace cb-mm1 --namespace cb-mm1
+```
+
+```yaml
+#cbcore-rolebinding-cb-core-install.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cb-core-install-cbcore
+  namespace: cb-mm1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cb-core-install
+  namespace: cb-mm1
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: cbcore
+  namespace: cb-mm1
+```
+
+```yaml
+# cb-core-install-role.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cb-core-install
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - persistentvolumeclaims
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - list
+  - get
+  - create
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - get
+  - list
+  - watch
+```
+
+
 ## References
 
 * https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/general-purpose-instances.html
