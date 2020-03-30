@@ -1,0 +1,33 @@
+# LDAP
+# https://github.com/jenkinsci/ldap-plugin/blob/master/src/main/java/jenkins/security/plugins/ldap/LDAPConfiguration.java
+# https://jenkins-updates.cloudbees.com/download/plugins/snakeyaml-api/
+# https://jenkins-updates.cloudbees.com/download/plugins/configuration-as-code/
+jenkins:
+  securityRealm:
+    ldap:
+      configurations:
+        - server: cloudbees-ldap:389
+          rootDN: dc=example,dc=com
+          managerDN: "uid=idm, ou=Administrators,dc=example,dc=com"
+          managerPasswordSecret: "secret"
+          userSearchBase: "ou=People"
+          displayNameAttributeName: "cn"
+          mailAddressAttributeName: "mail"
+          groupMembershipStrategy:
+            fromGroupSearch:
+              filter: ""
+# KUBERNETES
+  clouds:
+    - kubernetes:
+        name: "openshift2"
+        serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
+        serverCertificate: ""
+        skipTlsVerify: true
+        credentialsId: "osuserme"
+        namespace: "cb-mm1"
+        jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
+        containerCapStr: 42
+        maxRequestsPerHostStr: 64
+        retentionTimeout: 5
+        connectTimeout: 10
+        readTimeout: 20
