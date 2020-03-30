@@ -27,10 +27,10 @@ jenkins:
 #        jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
 unclassified:
   kubernetesMasterProvisioning:
-    - clusterEndpoints:
-        name: "openshift2"
-        serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
-        skipTlsVerify: true
-        credentialsId: "osuserme"
-        namespace: "cb-mm1"
-        jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
+    clusterEndpoints:
+    - name: "openshift2"
+      serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
+      skipTlsVerify: true
+      credentialsId: "osuserme"
+      namespace: "cb-mm1"
+      jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
