@@ -25,7 +25,7 @@ unclassified:
       url: ""
       skipTlsVerify: false
       namespace: ""
-      jenkinsUrl: ""
+      jenkinsUrl: "cjoc.cloudbees.svc.cluster.local"
       ingressClass: "nginx"
       masterUrlPattern: "https://core.cb-eks.kearos.net/*/"
     - name: "openshift"
