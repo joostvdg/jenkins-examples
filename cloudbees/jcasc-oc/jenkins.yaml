@@ -29,8 +29,10 @@ unclassified:
   kubernetesMasterProvisioning:
     clusterEndpoints:
     - name: "openshift2"
-      serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
+      url: "https://core.cb-eks.kearos.net/cjoc"
       skipTlsVerify: true
       credentialsId: "osuserme"
       namespace: "cb-mm1"
       jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
+      ingressClass: "nginx"
+      masterUrlPattern: "https://core.apps.ocp.kearos.net/*/"
