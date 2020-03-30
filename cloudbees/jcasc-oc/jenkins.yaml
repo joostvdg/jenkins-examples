@@ -16,6 +16,8 @@ jenkins:
           groupMembershipStrategy:
             fromGroupSearch:
               filter: ""
+# KUBERNETES MASTER PROVISIONING
+# CloudBees Core ONLY
 unclassified:
   kubernetesMasterProvisioning:
     clusterEndpoints:
