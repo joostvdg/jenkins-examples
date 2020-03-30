@@ -25,7 +25,8 @@ jenkins:
 #        credentialsId: "osuserme"
 #        namespace: "cb-mm1"
 #        jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
-  KubernetesMasterProvisioning:
+unclassified:
+  kubernetesMasterProvisioning:
     - clusterEndpoints:
         name: "openshift2"
         serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
