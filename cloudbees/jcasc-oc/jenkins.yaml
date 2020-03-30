@@ -21,13 +21,7 @@ jenkins:
     - kubernetes:
         name: "openshift2"
         serverUrl: "https://core.cb-eks.kearos.net/cjoc/configure"
-        serverCertificate: ""
         skipTlsVerify: true
         credentialsId: "osuserme"
         namespace: "cb-mm1"
         jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
-        containerCapStr: 42
-        maxRequestsPerHostStr: 64
-        retentionTimeout: 5
-        connectTimeout: 10
-        readTimeout: 20
