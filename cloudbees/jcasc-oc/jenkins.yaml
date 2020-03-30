@@ -21,6 +21,13 @@ jenkins:
 unclassified:
   kubernetesMasterProvisioning:
     clusterEndpoints:
+    - name: "kubernetes"
+      url: ""
+      skipTlsVerify: false
+      namespace: ""
+      jenkinsUrl: ""
+      ingressClass: "nginx"
+      masterUrlPattern: "https://core.cb-eks.kearos.net/*/"
     - name: "openshift"
       url: "https://api.ocp.kearos.net"
       skipTlsVerify: true
@@ -28,4 +35,4 @@ unclassified:
       namespace: "cb-mm1"
       jenkinsUrl: "https://core.cb-eks.kearos.net/cjoc/"
       ingressClass: "nginx"
-      masterUrlPattern: "https://core.apps.ocp.kearos.net/*/"
+      masterUrlPattern: "https://core.cb-eks.kearos.net/*/"
