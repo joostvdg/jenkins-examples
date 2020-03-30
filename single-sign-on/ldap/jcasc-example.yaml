@@ -1,0 +1,14 @@
+jenkins:
+  securityRealm:
+    ldap:
+      configurations:
+        - server: cloudbees-ldap:389
+          rootDN: dc=example,dc=com
+          managerDN: "uid=idm, ou=Administrators,dc=example,dc=com"
+          managerPasswordSecret: "secret"
+          userSearchBase: "ou=People"
+          displayNameAttributeName: "cn"
+          mailAddressAttributeName: "mail"
+          groupMembershipStrategy:
+            fromGroupSearch:
+              filter: ""
