@@ -1,0 +1,24 @@
+jenkins:
+  systemMessage: "Jenkins configured using JCasC - teams-hat!"
+  numExecutors: 0
+  mode: NORMAL
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+       - id: admin
+         password: letme1n2
+       - id: newuser
+         password: newuser
+  myViewsTabBar: "standard"
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy:
+    pattern:
+      description: "My naming strategy"
+      forceExistingJobs: false
+      namePattern: ".*"

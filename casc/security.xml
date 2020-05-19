@@ -15,6 +15,10 @@
         <entry>
             <string>mm4</string>
             <hudson.util.Secret>kjdskjhdsjkhsdf</hudson.util.Secret>
-        </entry>	   
+       </entry>	  
+       <entry>
+            <string>teams-hat</string>
+            <hudson.util.Secret>kjdskjhds213123df</hudson.util.Secret>
+        </entry>
     </access>
 </com.cloudbees.opscenter.server.casc.BundleStorage_-AccessControl>
