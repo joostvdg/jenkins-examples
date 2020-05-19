@@ -144,3 +144,6 @@ plugins:
 - id: "workflow-cps-global-lib"
 - id: "display-url-api"
 - id: "electricflow" 
+- id: "display-url-api"
+- id: "job-dsl"
+- id: "cloudbees-jenkins-advisor"
