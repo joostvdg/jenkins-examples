@@ -6,14 +6,14 @@ configurations:
 - description: "Exported plugins"
   includePlugins:
     pipeline-utility-steps:
-      version: "2.5.0"
+      url: http://jenkins-updates.cloudbees.com/download/plugins/pipeline-utility-steps/2.5.0/pipeline-utility-steps.hpi
     oic-auth:
-      version: "1.7"
+      url: http://jenkins-updates.cloudbees.com/download/plugins/oic-auth/1.7/oic-auth.hpi
     ws-cleanup:
-      version: "0.38"
+      url: http://jenkins-updates.cloudbees.com/download/plugins/ws-cleanup/0.38/ws-cleanup.hpi
     resource-disposer:
-      version: "0.14"
+      url: http://jenkins-updates.cloudbees.com/download/plugins/resource-disposer/0.14/resource-disposer.hpi
     prometheus:
-      version: "2.0.6"
-    devoptics:
-      version: "1.1863"
+      url: http://jenkins-updates.cloudbees.com/download/plugins/prometheus/2.0.6/prometheus.hpi
+    job-dsl:
+      url: http://jenkins-updates.cloudbees.com/download/plugins/job-dsl/1.77/job-dsl.hpi
