@@ -17,7 +17,7 @@
             <hudson.util.Secret>kjdskjhdsjkhsdf</hudson.util.Secret>
        </entry>	  
        <entry>
-            <string>teams-hat</string>
+            <string>hat</string>
             <hudson.util.Secret>kjdskjhds213123df</hudson.util.Secret>
         </entry>
     </access>
