@@ -147,3 +147,5 @@ plugins:
 - id: "display-url-api"
 - id: "job-dsl"
 - id: "cloudbees-jenkins-advisor"
+- id: "cloudbees-pipeline-policies"
+- id: "managed-master-hibernation"
