@@ -2,7 +2,7 @@ jenkins:
   securityRealm:
     ldap:
       configurations:
-        - server: cloudbees-ldap:389
+        - server: opendj4.cloudbees-ci:389
           rootDN: dc=example,dc=com
           managerDN: "uid=idm, ou=Administrators,dc=example,dc=com"
           managerPasswordSecret: "secret"
