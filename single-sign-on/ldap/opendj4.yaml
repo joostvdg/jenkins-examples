@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: opendj4
-        image: caladreas/opendj:4.4.3-1
+        image: caladreas/opendj:4.4.3-2
         ports:
         - containerPort: 1389
           name: ldap
