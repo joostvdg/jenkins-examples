@@ -144,3 +144,4 @@ plugins:
 - id: "workflow-cps-global-lib"
 - id: "display-url-api"
 - id: "electricflow"
+- id: "cloudbees-pipeline-policies"
