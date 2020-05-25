@@ -35,6 +35,7 @@ URL to checkout: `https://github.com/joostvdg/jenkins-examples.git`
 The bash command to execute.
 
 ```bash
+cp casc/core-casc-security.xml ${JENKINS_HOME}/
 cp -R casc/* ${JENKINS_HOME}/jcasc-bundles-store
 ls -lath ${JENKINS_HOME}/jcasc-bundles-store
 ```
