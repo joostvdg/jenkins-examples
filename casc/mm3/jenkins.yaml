@@ -22,22 +22,26 @@ jenkins:
       description: "My naming strategy"
       forceExistingJobs: false
       namePattern: ".*"
-  clouds:
-    - kubernetes:
-        templates:
-          - name: "maven-jdk11"
-            label: "maven-jdk11"
-            nodeUsageMode: EXCLUSIVE
-            containers:
-              - name: "maven"
-                image: "maven:3-jdk-11-openj9"
-                alwaysPullImage: true
-                workingDir: "/home/jenkins"
-                ttyEnabled: true
-                resourceRequestCpu: "500m"
-                resourceLimitCpu: "1000m"
-                resourceRequestMemory: "2Gi"
-                resourceLimitMemory: "2Gi"
+kube:
+  podTemplatesConfiguration:
+    templates:
+    - containers:
+      - command: "cat"
+        image: "maven:3-jdk-11-slim"
+        livenessProbe:
+          failureThreshold: 0
+          initialDelaySeconds: 0
+          periodSeconds: 0
+          successThreshold: 0
+          timeoutSeconds: 0
+        name: "maven"
+        ttyEnabled: true
+        workingDir: "/home/jenkins/agent"
+      hostNetwork: false
+      label: "mavenjdk11"
+      name: "mavenjdk11"
+      nodeUsageMode: "NORMAL"
+      yamlMergeStrategy: "override"
 
 unclassified:
   globalLibraries:
@@ -94,18 +98,24 @@ jobs:
           cps {
             script("""\
               pipeline {
-                agent { label 'maven-jdk11' } 
+                agent { label 'mavenjdk11' } 
                 stages {
-                  stage ('test maven') {
+                  stage ('SCM') {
                     steps {
-                      echo "hello"
+                      git 'https://github.com/joostvdg/jx-maven-lib.git'
+                    }
+                  }
+                  stage ('Build') {
+                    steps {
                       container('maven') {
-                        sh 'mvn version'
+                        sh 'mvn verify --show-version --no-transfer-progress -errors --strict-checksums'
                       }
                     }
                   }
                 }
-              }""".stripIndent())
+              }""".stripIndent()
+            )
+            sandbox()
           }
         }
       }
