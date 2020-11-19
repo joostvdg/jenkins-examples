@@ -83,6 +83,11 @@ roles:
   - hudson.model.Hudson.Read
   - hudson.model.View.Read
   name: browse
+- filterable: 'true'
+  permissions:
+  - hudson.model.Hudson.Read
+  - hudson.model.Item.Configure
+  name: developer  
 groups:
 - members:
     external_groups:
