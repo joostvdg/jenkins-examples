@@ -2,13 +2,6 @@ removeStrategy:
   rbac: SYNC
 roles:
 - name: authenticated
-- filterable: 'true'
-  permissions:
-  - com.cloudbees.jenkins.plugin.metrics.views.Alerter.View
-  - com.cloudbees.jenkins.support.SupportPlugin.DownloadBundle
-  - com.cloudbees.pipeline.governance.templates.catalog.TemplateCatalogAction.ViewCatalogs
-  - hudson.model.Hudson.Read
-  name: test2
 - permissions:
   - hudson.model.Computer.Connect
   - hudson.model.Hudson.UploadPlugins
