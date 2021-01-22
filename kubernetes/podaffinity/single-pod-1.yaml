@@ -1,0 +1,20 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-affinity-test-1
+  labels:
+    foo: bar
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: foo
+            operator: In
+            values:
+            - bar
+        topologyKey: "beta.kubernetes.io/os"  
+  containers:
+  - name: pause
+    image: k8s.gcr.io/pause:3.1
