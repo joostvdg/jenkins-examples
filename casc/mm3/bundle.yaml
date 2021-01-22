@@ -8,3 +8,7 @@ jcasc:
   - "jenkins.yaml"
 catalog:
   - "plugin-catalog.yaml"
+rbac:
+  - "rbac.yaml"
+items:
+  - "items.yaml"

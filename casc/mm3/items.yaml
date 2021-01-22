@@ -1,0 +1,15 @@
+removeStrategy:
+  rbac: SYNC
+  items: NONE
+items:
+- kind: folder
+  name: devs-be-admins
+  description: ''
+  groups:
+  - members:
+      external_groups:
+      - Green
+    roles:
+    - name: administer
+      grantedAt: current
+    name: green-super-dev

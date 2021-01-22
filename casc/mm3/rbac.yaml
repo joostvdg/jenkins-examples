@@ -1,0 +1,15 @@
+groups:
+- members:
+    external_groups:
+    - GreenAdmins
+  roles:
+  - name: administer
+    grantedAt: current
+  name: green-admins
+- members:
+    external_groups:
+    - Green
+  roles:
+  - name: browse
+    grantedAt: current
+  name: green-devs

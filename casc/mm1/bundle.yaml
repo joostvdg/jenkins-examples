@@ -1,6 +1,6 @@
 id: "git-bundle"
 apiVersion: "1"
-version: "1"
+version: "2"
 description: "A simple bundle that sets up a master with the git-client plugin"
 plugins:
   - "plugins.yaml"
@@ -8,3 +8,7 @@ jcasc:
   - "jenkins.yaml"
 catalog:
   - "plugin-catalog.yaml"
+rbac:
+  - "rbac.yaml"
+items:
+  - "items.yaml"

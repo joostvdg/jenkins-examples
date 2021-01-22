@@ -1,24 +1,32 @@
 jenkins:
   systemMessage: "Jenkins configured using CasC - mm1."
-  numExecutors: 0
-  mode: NORMAL
+  agentProtocols:
+  - "Diagnostic-Ping"
+  - "JNLP4-connect"
+  - "OperationsCenter2"
+  - "Ping"
+  authorizationStrategy: "cloudBeesRoleBasedAccessControl"
   crumbIssuer:
     standard:
       excludeClientIPFromCrumb: true
-  securityRealm:
-    local:
-      allowsSignup: false
-      users:
-       - id: admin
-         password: letme1n2
-       - id: newuser
-         password: newuser
+  disableRememberMe: false
+  disabledAdministrativeMonitors:
+  - "com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor"
+  labelAtoms:
+  - name: "master"
+  markupFormatter: "plainText"
+  mode: NORMAL
   myViewsTabBar: "standard"
+  numExecutors: 0
   primaryView:
     all:
       name: "all"
-  projectNamingStrategy:
-    pattern:
-      description: "My naming strategy"
-      forceExistingJobs: false
-      namePattern: ".*"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 0
+  securityRealm: "operationsCenter"
+unclassified:
+  usageStatisticsCloudBees:
+    usageStatisticsCollected: true

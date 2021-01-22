@@ -149,3 +149,4 @@ plugins:
 - id: "cloudbees-jenkins-advisor"
 - id: "cloudbees-pipeline-policies"
 - id: "managed-master-hibernation"
+- id: "cloudbees-casc-api"
