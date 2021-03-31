@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO        = 'caladreas'
         IMAGE       = 'jnlp-test'
-        TAG         = "0.21.${BUILD_NUMBER}"
+        TAG         = "0.30.${BUILD_NUMBER}"
     }
     stages {
         stage('Image Build') {
@@ -29,6 +29,9 @@ spec:
     volumeMounts:
       - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
+    env:
+      - name: DOCKER_CONFIG
+        value: /kaniko/.docker
   volumes:
   - name: jenkins-docker-cfg
     projected:
@@ -53,7 +56,7 @@ spec:
                                 container(name: 'kaniko', shell: '/busybox/sh') {
                                     withEnv(['PATH+EXTRA=/busybox']) {
                                         sh '''#!/busybox/sh
-                                        /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cleanup --cache=true --destination=${REPO}/${IMAGE}:${TAG} --destination=${REGISTRY}/${REPO}/${IMAGE}:latest
+                                        /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cleanup --cache=true --destination ${REPO}/${IMAGE}:${TAG} --destination ${REPO}/${IMAGE}:latest
                                         '''
                                     }
                                 }
