@@ -40,6 +40,7 @@ plugins:
 - {id: cloudbees-bitbucket-branch-source}
 - {id: cloudbees-blueocean-default-theme}
 - {id: cloudbees-casc-api}
+- {id: cloudbees-casc-server}
 - {id: cloudbees-console-log-masker}
 - {id: cloudbees-folder}
 - {id: cloudbees-folders-plus}
