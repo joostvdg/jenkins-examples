@@ -1,3 +1,14 @@
+unclassified:      
+  globalLibraries:
+    libraries:
+    - defaultVersion: "master"
+      name: "jpl-maven"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-maven.git"
+
 kube:
   podTemplatesConfiguration:
     templates:
@@ -16,13 +27,4 @@ kube:
       id: "d7015296-4592-4dea-8a91-1b574afa2bcd"
       name: "golang"
       yamlMergeStrategy: "override"
-unclassified:      
-  globalLibraries:
-    libraries:
-    - defaultVersion: "master"
-      name: "jpl-maven"
-      retriever:
-        modernSCM:
-          scm:
-            git:
-              remote: "https://github.com/joostvdg/jpl-maven.git"
+
