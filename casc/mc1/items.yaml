@@ -4,6 +4,21 @@ removeStrategy:
 
 items:
   - kind: "freeStyle"
+    name: "casc-sync"
+    displayName: "CasC Bundle Sync"
+    description: "Syncronizes CasC Bundles."
+    disabled: false
+    quietPeriod: 10
+    scm:
+      gitSCM:
+        gitTool: git
+        userRemoteConfigs:
+          - userRemoteConfig:
+              url: "https://github.com/joostvdg/jenkins-examples.git"
+    builders:
+      - shell:
+          command: "cp -R casc/* ${JENKINS_HOME}/jcasc-bundles-store"
+  - kind: "freeStyle"
     name: "freeStyle-test"
     displayName: "Testing FreeStyle"
     description: "FreeStyleProject for testing purpose!"
