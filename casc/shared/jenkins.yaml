@@ -1,0 +1,75 @@
+jenkins:
+  systemMessage: "Jenkins configured using CasC - Shared Bundle."
+  agentProtocols:
+  - "Diagnostic-Ping"
+  - "JNLP4-connect"
+  - "OperationsCenter2"
+  - "Ping"
+  authorizationStrategy: "cloudBeesRoleBasedAccessControl"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  disableRememberMe: false
+  disabledAdministrativeMonitors:
+  - "com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor"
+  labelAtoms:
+  - name: "master"
+  markupFormatter: "plainText"
+  mode: NORMAL
+  myViewsTabBar: "standard"
+  numExecutors: 0
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 0
+  securityRealm: "operationsCenter"
+unclassified:
+  usageStatisticsCloudBees:
+    usageStatisticsCollected: true
+kube:
+  podTemplatesConfiguration:
+    templates:
+    - containers:
+      - args: "9999999"
+        command: "sleep"
+        image: "maven:3.3.9-jdk-8-alpine"
+        livenessProbe:
+          failureThreshold: 0
+          initialDelaySeconds: 0
+          periodSeconds: 0
+          successThreshold: 0
+          timeoutSeconds: 0
+        name: "maven"
+        workingDir: "/home/jenkins/agent"
+      id: "bb64cfbd-527a-488f-9aac-5c2123caa2b9"
+      name: "maven"
+      yamlMergeStrategy: "override"
+unclassified:
+  globalLibraries:
+    libraries:
+    - defaultVersion: "master"
+      implicit: true
+      includeInChangesets: false
+      name: "jpl-podtemplates"
+      retriever:
+        modernSCM:
+          scm:
+            github:
+              configuredByUrl: true
+              repository: "jpl-podtemplates"
+              repositoryUrl: "https://github.com/joostvdg/jpl-podtemplates.git"
+    - defaultVersion: "master"
+      implicit: true
+      includeInChangesets: false
+      name: "jpl-core"
+      retriever:
+        modernSCM:
+          scm:
+            github:
+              configuredByUrl: true
+              repository: "jpl-core"
+              repositoryUrl: "https://github.com/joostvdg/jpl-core.git"                  
