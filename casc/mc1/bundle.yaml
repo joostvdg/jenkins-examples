@@ -1,6 +1,6 @@
 id: "git-bundle-mc1"
 apiVersion: "1"
-version: "1"
+version: "2"
 description: "A simple bundle that sets up a master with the git-client plugin"
 parent: "shared"
 jcasc:
