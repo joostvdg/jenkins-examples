@@ -1,32 +1,27 @@
-jenkins:
-  systemMessage: "Jenkins configured using CasC - mc1."
-  agentProtocols:
-  - "Diagnostic-Ping"
-  - "JNLP4-connect"
-  - "OperationsCenter2"
-  - "Ping"
-  authorizationStrategy: "cloudBeesRoleBasedAccessControl"
-  crumbIssuer:
-    standard:
-      excludeClientIPFromCrumb: true
-  disableRememberMe: false
-  disabledAdministrativeMonitors:
-  - "com.cloudbees.jenkins.support.impl.cloudbees.TcpSlaveAgentListenerMonitor"
-  labelAtoms:
-  - name: "master"
-  markupFormatter: "plainText"
-  mode: NORMAL
-  myViewsTabBar: "standard"
-  numExecutors: 0
-  primaryView:
-    all:
-      name: "all"
-  projectNamingStrategy: "standard"
-  quietPeriod: 5
-  remotingSecurity:
-    enabled: true
-  scmCheckoutRetryCount: 0
-  securityRealm: "operationsCenter"
-unclassified:
-  usageStatisticsCloudBees:
-    usageStatisticsCollected: true
+kube:
+  podTemplatesConfiguration:
+    templates:
+    - containers:
+      - args: "9999999"
+        command: "sleep"
+        image: "golang:1.8.0"
+        livenessProbe:
+          failureThreshold: 0
+          initialDelaySeconds: 0
+          periodSeconds: 0
+          successThreshold: 0
+          timeoutSeconds: 0
+        name: "golang"
+        workingDir: "/home/jenkins/agent"
+      id: "d7015296-4592-4dea-8a91-1b574afa2bcd"
+      name: "golang"
+      yamlMergeStrategy: "override"
+  globalLibraries:
+    libraries:
+    - defaultVersion: "master"
+      name: "jpl-maven"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-maven.git"
