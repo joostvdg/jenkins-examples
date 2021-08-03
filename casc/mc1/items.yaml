@@ -1,0 +1,217 @@
+items:
+  - kind: "freeStyle"
+    name: "freeStyle-test"
+    displayName: "Testing FreeStyle"
+    description: "FreeStyleProject for testing purpose!"
+    concurrentBuild: true
+    blockBuildWhenDownstreamBuilding: true
+    blockBuildWhenUpstreamBuilding: false
+    customWorkspace: "/tmp/my-folder"
+    disabled: false
+    quietPeriod: 10
+    scm:
+      gitSCM:
+        extensions:
+          - checkoutOption:
+              timeout: 4
+        gitTool: git
+        userRemoteConfigs:
+          - userRemoteConfig:
+              name: "testing-name"
+              credentialsId: "credentials-id"
+              url: "git@github.com:cloudbees/cloudbees-casc-api.git"
+        browser:
+          githubWeb:
+            repoUrl: "https://github.com/cloudbees/cloudbees-casc-api"
+        doGenerateSubmoduleConfigurations: false
+        branches:
+          - branchSpec:
+              name: "*/master"
+    buildDiscarder:
+      logRotator:
+        artifactDaysToKeep: 3
+        daysToKeep: 1
+        numToKeep: 2
+        artifactNumToKeep: 4
+    scmCheckoutStrategy:
+      standard: { }
+    JDK:
+      jdk:
+        name: "my-jdk"
+        home: "path/to/java"
+    builders:
+      - shell:
+          command: "pwd"
+      - maven:
+          settings:
+            standard: { }
+          injectBuildVariables: false
+          globalSettings:
+            standard: { }
+          usePrivateRepository: false
+          targets: "clean test"
+    label: "testing-label"
+    triggers:
+      - pollSCM:
+          ignorePostCommitHooks: false
+          scmpoll_spec: "0 0 * * *"
+      - cron:
+          spec: "1 1 * * *"
+    parameters:
+      - string:
+          trim: true
+          defaultValue: "default string value"
+          name: "param1"
+          description: "description param1"
+      - choice:
+          name: "param2"
+          description: "description param2"
+          choices:
+            - "option1"
+            - "option2"
+            - "option3"
+      - booleanParam:
+          defaultValue: true
+          name: "param3"
+          description: "description param3"
+    publishersList:
+      - archiveArtifacts:
+          allowEmptyArchive: true
+          caseSensitive: true
+          onlyIfSuccessful: true
+          fingerprint: true
+          defaultExcludes: true
+          followSymlinks: true
+          artifacts: "*.txt"
+      - jUnitResultArchiver:
+          testResults: "path/to/*Test.xml"
+          allowEmptyResults: true
+          healthScaleFactor: 1.5
+          keepLongStdio: true
+      - mailer:
+          notifyEveryUnstableBuild: false
+          sendToIndividuals: true
+          recipients: "user@acme.com"
+  - kind: "pipeline"
+    displayName: "Fully configured Pipeline"
+    name: "workflowJob-test"
+    description: "Fully configured Pipeline!"
+    concurrentBuild: false
+    resumeBlocked: true
+    definition:
+      cpsScmFlowDefinition:
+        scriptPath: "scripts/Jenkinsfile.classic"
+        scm:
+          gitSCM:
+            extensions:
+              - checkoutOption:
+                  timeout: 2
+              - cloneOption:
+                  reference: "/workspace/git"
+                  noTags: false
+                  honorRefspec: false
+                  shallow: true
+                  timeout: 5
+              - submoduleOption:
+                  reference: "/workspace/git"
+                  recursiveSubmodules: true
+                  trackingSubmodules: true
+                  parentCredentials: true
+                  shallow: false
+                  timeout: 5
+                  disableSubmodules: true
+              - buildSingleRevisionOnly: {}
+              - changelogToBranch:
+                  options:
+                    changelogToBranchOptions:
+                      compareRemote: "origin"
+                      compareTarget: "master"
+              - relativeTargetDirectory:
+                  relativeTargetDir: "sudirectory"
+              - cleanCheckout:
+                  deleteUntrackedNestedRepositories: false
+              - cleanBeforeCheckout:
+                  deleteUntrackedNestedRepositories: false
+              - perBuildTag: {}
+              - scmName:
+                  name: "casc-api"
+              - userIdentity:
+                  name: "name"
+                  email: "email"
+              - ignoreNotifyCommit: {}
+              - disableRemotePoll: {}
+              - gitLFSPull: {}
+              - preBuildMerge:
+                  options:
+                    userMergeOptions:
+                      mergeStrategy: DEFAULT
+                      fastForwardMode: FF
+                      mergeTarget: "origin"
+              - userExclusion:
+                  excludedUsers: "acme"
+              - pathRestriction:
+                  excludedRegions: "excluded-region"
+                  includedRegions: "included-region"
+              - messageExclusion:
+                  excludedMessage: "to exclude"
+              - pruneStaleBranch: {}
+              - sparseCheckoutPaths:
+                  sparseCheckoutPaths:
+                    - sparseCheckoutPath:
+                        path: "/src/test"
+              - buildChooserSetting:
+                  buildChooser:
+                    ancestryBuildChooser:
+                      ancestorCommitSha1: "6676f41dae22d9f46cc532f32eadb998a368ad2a"
+                      maximumAgeInDays: 4
+              - authorInChangelog: {}
+              - wipeWorkspace: {}
+            gitTool: "git"
+            userRemoteConfigs:
+              - userRemoteConfig:
+                  url: "https://github.com/joostvdg/jx-maven-lib"
+            browser:
+              githubWeb:
+                repoUrl: "https://github.com/joostvdg/jx-maven-lib"
+            branches:
+              - branchSpec:
+                  name: "*/master"
+        lightweight: true
+    disabled: false
+    properties:
+      - buildDiscarder:
+          strategy:
+            logRotator:
+              artifactDaysToKeep: 3
+              artifactNumToKeep: 4
+              daysToKeep: 1
+              numToKeep: 2
+      - disableConcurrentBuilds: {}
+      - disableResume: {}
+      - parameters:
+          parameterDefinitions:
+            - string:
+                trim: true
+                defaultValue: "description param1"
+                name: "param1"
+                description: "default string value"
+      - githubProjectProperty:
+          projectUrlStr: "https://github.com/joostvdg/jx-maven-lib"
+      - durabilityHint:
+          hint: PERFORMANCE_OPTIMIZED
+      - preserveStashes:
+          buildCount: 1
+      - rateLimitBuilds:
+          throttle:
+            throttle:
+              count: 5
+              userBoost: true
+              durationName: "hour"
+      - pipelineTriggers:
+          triggers:
+            - pollSCM:
+                ignorePostCommitHooks: false
+                scmpoll_spec: "H H * * *"
+            - cron:
+                spec: "H H(0-7) * * *"
+            - githubPush: {}          
