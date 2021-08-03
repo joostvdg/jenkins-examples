@@ -2,9 +2,9 @@ id: "git-bundle-mc1"
 apiVersion: "1"
 version: "1"
 description: "A simple bundle that sets up a master with the git-client plugin"
+parent: "shared-bundle"
 jcasc:
   - "jenkins.yaml"
 items:
   - "items.yaml"
-plugins:
-  - "plugins.yaml"
+
