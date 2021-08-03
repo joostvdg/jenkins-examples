@@ -2,3 +2,6 @@ plugins:
 - {id: cloudbees-casc-api}
 - {id: workflow-job}
 - {id: workflow-multibranch}
+- {id: git}
+- {id: git-client}
+- {id: git-server}
