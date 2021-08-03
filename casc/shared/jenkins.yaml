@@ -30,6 +30,7 @@ jenkins:
 unclassified:
   usageStatisticsCloudBees:
     usageStatisticsCollected: true
+
 kube:
   podTemplatesConfiguration:
     templates:
@@ -43,33 +44,26 @@ kube:
           periodSeconds: 0
           successThreshold: 0
           timeoutSeconds: 0
-        name: "maven"
+        name: "golang"
         workingDir: "/home/jenkins/agent"
-      id: "bb64cfbd-527a-488f-9aac-5c2123caa2b9"
+      id: "d7015296-4592-4dea-8a91-1b574afa2bcd"
       name: "maven"
       yamlMergeStrategy: "override"
-unclassified:
+unclassified:      
   globalLibraries:
     libraries:
     - defaultVersion: "master"
-      implicit: true
-      includeInChangesets: false
-      name: "jpl-podtemplates"
-      retriever:
-        modernSCM:
-          scm:
-            github:
-              configuredByUrl: true
-              repository: "jpl-podtemplates"
-              repositoryUrl: "https://github.com/joostvdg/jpl-podtemplates.git"
-    - defaultVersion: "master"
-      implicit: true
-      includeInChangesets: false
       name: "jpl-core"
       retriever:
         modernSCM:
           scm:
-            github:
-              configuredByUrl: true
-              repository: "jpl-core"
-              repositoryUrl: "https://github.com/joostvdg/jpl-core.git"                  
+            git:
+              remote: "https://github.com/joostvdg/jpl-core.git"
+    - defaultVersion: "master"
+      name: "jpl-podtemplates"
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              remote: "https://github.com/joostvdg/jpl-podtemplates.git"              
+         
