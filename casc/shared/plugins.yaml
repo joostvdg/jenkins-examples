@@ -1,0 +1,12 @@
+plugins:
+- {id: cloudbees-casc-api}
+- {id: workflow-job}
+- {id: workflow-multibranch}
+- {id: git}
+- {id: git-client}
+- {id: git-server}
+- {id: github}
+- {id: github-api}
+- {id: github-branch-source}
+- {id: github-organization-folder}
+- {id: pipeline-model-definition}
