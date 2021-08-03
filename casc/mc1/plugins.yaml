@@ -1,0 +1,4 @@
+plugins:
+- {id: cloudbees-casc-api}
+- {id: workflow-job}
+- {id: workflow-multibranch}
