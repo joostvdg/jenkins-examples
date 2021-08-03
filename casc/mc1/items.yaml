@@ -1,3 +1,7 @@
+removeStrategy:
+  items: "none"
+  rbac: "sync"
+
 items:
   - kind: "freeStyle"
     name: "freeStyle-test"
