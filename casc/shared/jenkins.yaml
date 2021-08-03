@@ -27,28 +27,7 @@ jenkins:
     enabled: true
   scmCheckoutRetryCount: 0
   securityRealm: "operationsCenter"
-unclassified:
-  usageStatisticsCloudBees:
-    usageStatisticsCollected: true
 
-kube:
-  podTemplatesConfiguration:
-    templates:
-    - containers:
-      - args: "9999999"
-        command: "sleep"
-        image: "maven:3.3.9-jdk-8-alpine"
-        livenessProbe:
-          failureThreshold: 0
-          initialDelaySeconds: 0
-          periodSeconds: 0
-          successThreshold: 0
-          timeoutSeconds: 0
-        name: "golang"
-        workingDir: "/home/jenkins/agent"
-      id: "d7015296-4592-4dea-8a91-1b574afa2bcd"
-      name: "maven"
-      yamlMergeStrategy: "override"
 unclassified:      
   globalLibraries:
     libraries:
@@ -65,5 +44,25 @@ unclassified:
         modernSCM:
           scm:
             git:
-              remote: "https://github.com/joostvdg/jpl-podtemplates.git"              
+              remote: "https://github.com/joostvdg/jpl-podtemplates.git" 
+
+kube:
+  podTemplatesConfiguration:
+    templates:
+    - containers:
+      - args: "9999999"
+        command: "sleep"
+        image: "maven:3.3.9-jdk-8-alpine"
+        livenessProbe:
+          failureThreshold: 0
+          initialDelaySeconds: 0
+          periodSeconds: 0
+          successThreshold: 0
+          timeoutSeconds: 0
+        name: "golang"
+        workingDir: "/home/jenkins/agent"
+      id: "d7015296-4592-4dea-8a91-1b574afa2bdd"
+      name: "maven"
+      yamlMergeStrategy: "override"
+             
          
