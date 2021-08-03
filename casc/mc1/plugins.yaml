@@ -5,3 +5,7 @@ plugins:
 - {id: git}
 - {id: git-client}
 - {id: git-server}
+- {id: github}
+- {id: github-api}
+- {id: github-branch-source}
+- {id: github-organization-folder}
