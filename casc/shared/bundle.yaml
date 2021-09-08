@@ -1,8 +1,12 @@
 apiVersion: "1"
-version: "2"
+version: "3"
 id: "shared"
 description: "Shared Bundle"
 jcasc:
   - "jenkins.yaml"
 plugins:
   - "plugins.yaml"
+plugins:
+  - "plugins.yaml"
+catalog:
+  - "plugin-catalog.yaml"
