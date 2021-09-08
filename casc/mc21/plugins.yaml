@@ -1,0 +1,4 @@
+plugins:
+- {id: cloudbees-template}
+- {id: cloudbees-workflow-template}
+- {id: blueocean}
