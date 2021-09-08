@@ -12,3 +12,5 @@ plugins:
 - {id: github-organization-folder}
 - {id: pipeline-model-definition}
 - {id: workflow-cps-global-lib} 
+- {id: workflow-cps-global-lib} 
+- {id: prometheus}
