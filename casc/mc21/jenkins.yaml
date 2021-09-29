@@ -4,4 +4,4 @@ unclassified:
     - "build"
     - "web"
     enabled: true
-    gracePeriod: 3600
+    gracePeriod: 360000
