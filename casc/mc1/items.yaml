@@ -53,11 +53,6 @@ items:
         numToKeep: 2
         artifactNumToKeep: 4
     scmCheckoutStrategy:
-      standard: { }
-    JDK:
-      jdk:
-        name: "my-jdk"
-        home: "path/to/java"
     builders:
       - shell:
           command: "pwd"
