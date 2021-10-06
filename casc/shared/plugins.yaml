@@ -14,4 +14,4 @@ plugins:
 - {id: workflow-cps-global-lib} 
 - {id: pipeline-graph-analysis} 
 - {id: pipeline-rest-api} 
-- {id: prometheus}
+- {id: cloudbees-prometheus}
