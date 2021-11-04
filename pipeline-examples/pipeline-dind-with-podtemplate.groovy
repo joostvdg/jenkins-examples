@@ -1,47 +1,45 @@
+// It seems the Docker 20.10 images are different
+// and the DIND setup below doesn't work with those
+
+def agentPodYAML = """
+spec:
+  containers:
+  - name: docker-client
+    image: docker:19.03.15
+    command: ['sleep', '99d']
+    env:
+      - name: DOCKER_HOST
+        value: tcp://localhost:2375
+  - name: docker-daemon
+    image: docker:19.03.15-dind
+    env:
+      - name: DOCKER_TLS_CERTDIR
+        value: ""
+    securityContext:
+      privileged: true
+"""
+
 pipeline {
     options {
         disableConcurrentBuilds()
     }
-        agent {
+    agent {
         kubernetes {
-        label 'mypod'
-        yaml """
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: maven
-    image: maven:3-jdk-11-slim
-    command: ['cat']
-    tty: true
-  - name: docker-cmds 
-    image: docker:1.12.6 
-    command: ['docker', 'run', '-p', '80:80', 'httpd:latest'] 
-    env: 
-    - name: DOCKER_HOST 
-      value: tcp://localhost:2375 
-  - name: dind-daemon 
-    image: docker:1.12.6-dind 
-    securityContext: 
-      privileged: true 
-    volumeMounts: 
-      - name: docker-graph-storage 
-        mountPath: /var/lib/docker 
-  volumes: 
-    - name: docker-graph-storage 
-      emptyDir: {}
-"""
+            yaml agentPodYAML
         }
     }
     stages {
-        stage('Run maven') {
+        stage('Write Mini Dockerfile') {
             steps {
-                git 'https://github.com/joostvdg/jx-maven-lib.git'
-                container('docker-cmds') {
-                    sh "docker run -v ${WORKSPACE}:/usr/src/mymaven -w /usr/src/mymaven maven:3-jdk-11-slim mvn clean verify"
+                writeFile file: 'Dockerfile', text: 'FROM scratch'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                container('docker-client') {
+                    sh 'docker version && DOCKER_BUILDKIT=1 docker build --progress plain -t testing .'
                 }
             }
         }
     }
 }
-
